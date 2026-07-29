@@ -1,0 +1,1334 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Dashboard — My African Wear</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --accent: #D4700A;
+            --accent2: #2E8B00;
+            --danger: #f85149;
+            --warn: #d29922;
+            --info: #388bfd;
+            --success: #3fb950;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Login Screen ── */
+        #devLoginScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+
+        .dev-login-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .dev-login-card .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(212, 112, 10, 0.15);
+            border: 1px solid rgba(212, 112, 10, 0.4);
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        .dev-login-title {
+            font-family: 'Canela', serif;
+            font-size: 1.6rem;
+            font-weight: 300;
+            margin-bottom: 0.25rem;
+        }
+
+        .dev-login-sub {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 1.75rem;
+        }
+
+        .dev-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .dev-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dev-input {
+            padding: 0.75rem 1rem;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .dev-input:focus {
+            border-color: var(--accent);
+        }
+
+        .dev-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.25rem;
+        }
+
+        .dev-btn:hover {
+            background: #B85E08;
+        }
+
+        .dev-btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+
+        .dev-alert {
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            margin-bottom: 1rem;
+            display: none;
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        .dev-alert.show {
+            display: block;
+        }
+
+        /* ── Dashboard Layout ── */
+        #devDashboard {
+            display: none;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topbar-logo {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .topbar-logo span {
+            color: var(--accent);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topbar-meta {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .logout-btn {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            color: var(--danger);
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ── Stats ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 0.6rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+        }
+
+        .search-input::placeholder {
+            color: var(--muted);
+        }
+
+        .filter-select {
+            padding: 0.6rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.875rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .export-btn {
+            padding: 0.6rem 1.2rem;
+            background: rgba(46, 139, 0, 0.15);
+            border: 1px solid rgba(46, 139, 0, 0.4);
+            color: var(--accent2);
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .export-btn:hover {
+            background: rgba(46, 139, 0, 0.25);
+        }
+
+        /* ── Table ── */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .record-count {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #0d1117;
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            font-size: 0.82rem;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .mono-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.55rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }
+
+        .badge-old {
+            background: rgba(139, 148, 158, 0.1);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .user-id {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 0.25rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-btn.danger:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ── Detail Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 8000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+            transform: translateY(20px);
+            transition: transform 0.2s;
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-head {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-head h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .detail-item.full {
+            grid-column: 1/-1;
+        }
+
+        .detail-key {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .detail-val {
+            font-size: 0.875rem;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .detail-section {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.25rem 0 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ── Confirm Delete ── */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .confirm-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-card {
+            background: var(--surface);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            border-radius: 14px;
+            padding: 2rem;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .confirm-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirm-card p {
+            color: var(--muted);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            padding: 0.6rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            padding: 0.6rem 1.2rem;
+            background: rgba(248, 81, 73, 0.15);
+            border: 1px solid rgba(248, 81, 73, 0.4);
+            color: var(--danger);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 3px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 3px solid var(--danger);
+        }
+
+        /* ── Tab buttons ── */
+        .tab-btn {
+            padding: 0.35rem 0.9rem;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            background: rgba(212, 112, 10, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @media (max-width:768px) {
+            .main {
+                padding: 1rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            table {
+                min-width: 700px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Developer Login Screen ─────────────────────────────────────────────── -->
+    <div id="devLoginScreen">
+        <div class="dev-login-card">
+            <div class="dev-badge">🔒 Developer Access</div>
+            <h1 class="dev-login-title">Developer Dashboard</h1>
+            <p class="dev-login-sub">My African Wear — Internal user data portal. Authorised access only.</p>
+            <div id="dev-alert" class="dev-alert"></div>
+            <form onsubmit="handleDevLogin(event); return false;" novalidate>
+                <div class="dev-field">
+                    <label class="dev-label">Developer Username</label>
+                    <input class="dev-input" type="text" id="dev-user" placeholder="developer" autocomplete="username"
+                        required>
+                </div>
+                <div class="dev-field">
+                    <label class="dev-label">Developer Password</label>
+                    <input class="dev-input" type="password" id="dev-pass" placeholder="••••••••"
+                        autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="dev-btn" id="dev-login-btn">Access Dashboard</button>
+            </form>
+            <p style="text-align:center;margin-top:1.25rem;font-size:0.75rem;color:var(--muted);">
+                Not a developer? <a href="index.html" style="color:var(--accent);text-decoration:none;">Return to
+                    store</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Developer Dashboard ────────────────────────────────────────────────── -->
+    <div id="devDashboard">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-logo">My African Wear <span>/ dev</span></span>
+                <div style="display:flex;gap:0.5rem;margin-left:1rem;">
+                    <button class="tab-btn active" id="tab-users" onclick="switchTab('users')">👥 Users</button>
+                    <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">⚙️ Settings</button>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-meta" id="devClock"></span>
+                <button class="logout-btn" onclick="devLogout()">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- ── Users Panel ── -->
+        <div id="panel-users" class="main">
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total" style="color:var(--accent);">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-today" style="color:var(--success);">0</div>
+                    <div class="stat-label">Registered Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-week" style="color:var(--info);">0</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-month" style="color:var(--warn);">0</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <input class="search-input" type="text" id="devSearch"
+                    placeholder="🔍  Search by name, email, phone or city…" oninput="renderTable()">
+                <select class="filter-select" id="devSort" onchange="renderTable()">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="name">Name A–Z</option>
+                </select>
+                <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrap">
+                <div class="table-header">
+                    <span class="table-title">Registered Users</span>
+                    <span class="record-count" id="recordCount">0 records</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Registered</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Settings Panel ─────────────────────────────────────────────────────── -->
+    <div id="panel-settings" class="main" style="display:none;max-width:600px;">
+        <h2 style="font-family:'Canela',serif;font-size:1.5rem;font-weight:300;margin-bottom:0.25rem;">Developer
+            Settings</h2>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:2rem;">Manage your developer account credentials.
+        </p>
+
+        <!-- Current credentials info -->
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
+            <div
+                style="width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">
+                👨‍💻</div>
+            <div>
+                <div style="font-weight:600;font-size:0.9rem;" id="settings-username-display">developer</div>
+                <div style="font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">Developer
+                    Account</div>
+            </div>
+            <div style="margin-left:auto;">
+                <span class="dev-badge" style="margin:0;">Active</span>
+            </div>
+        </div>
+
+        <!-- Change Password Card -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem;">
+            <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:0.25rem;">Change Password</h3>
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;">Enter your current password, then set a
+                new one. Minimum 8 characters.</p>
+
+            <div id="settings-alert"
+                style="display:none;padding:0.7rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:1.25rem;">
+            </div>
+
+            <form onsubmit="handleChangePassword(event); return false;" novalidate>
+                <div class="dev-field">
+                    <label class="dev-label">Current Password</label>
+                    <div style="position:relative;">
+                        <input class="dev-input" type="password" id="pw-current" placeholder="••••••••"
+                            style="width:100%;padding-right:2.8rem;">
+                        <button type="button" onclick="toggleDevPw('pw-current',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;">👁</button>
+                    </div>
+                </div>
+                <div class="dev-field">
+                    <label class="dev-label">New Password</label>
+                    <div style="position:relative;">
+                        <input class="dev-input" type="password" id="pw-new" placeholder="Min. 8 characters"
+                            style="width:100%;padding-right:2.8rem;" oninput="checkDevStrength(this.value)">
+                        <button type="button" onclick="toggleDevPw('pw-new',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;">👁</button>
+                    </div>
+                    <div
+                        style="height:3px;border-radius:2px;background:var(--border);margin-top:0.4rem;overflow:hidden;">
+                        <div id="dev-strength-fill"
+                            style="height:100%;border-radius:2px;width:0;transition:width 0.3s,background 0.3s;"></div>
+                    </div>
+                    <div id="dev-strength-label" style="font-size:0.7rem;color:var(--muted);margin-top:3px;"></div>
+                </div>
+                <div class="dev-field">
+                    <label class="dev-label">Confirm New Password</label>
+                    <div style="position:relative;">
+                        <input class="dev-input" type="password" id="pw-confirm" placeholder="Repeat new password"
+                            style="width:100%;padding-right:2.8rem;">
+                        <button type="button" onclick="toggleDevPw('pw-confirm',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.85rem;">Show</button>
+                    </div>
+                </div>
+                <div
+                    style="display:flex;gap:0.75rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+                    <button type="button" onclick="clearPwForm()"
+                        style="padding:0.65rem 1.25rem;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:0.875rem;cursor:pointer;">Clear</button>
+                    <button type="submit" class="dev-btn" style="flex:1;">Update Password</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Danger Zone -->
+        <div
+            style="background:rgba(248,81,73,0.05);border:1px solid rgba(248,81,73,0.2);border-radius:12px;padding:1.5rem;margin-top:1.5rem;">
+            <h3 style="font-size:0.9rem;font-weight:700;color:var(--danger);margin-bottom:0.4rem;">⚠ Session</h3>
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">Sign out of the developer dashboard on
+                this device.</p>
+            <button onclick="devLogout()" class="logout-btn" style="font-size:0.82rem;padding:0.5rem 1.25rem;">Sign Out
+                Now</button>
+        </div>
+    </div>
+
+    <!-- ── User Detail Modal ──────────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="detailOverlay">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>User Profile</h3>
+                <button class="modal-close" onclick="closeDetail()">&times;</button>
+            </div>
+            <div class="modal-body" id="detailBody"></div>
+        </div>
+    </div>
+
+    <!-- ── Confirm Delete ─────────────────────────────────────────────────────── -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-card">
+            <h3>Delete User?</h3>
+            <p>This will permanently remove this user account from the database. This cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="btn-delete" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Toast ──────────────────────────────────────────────────────────────── -->
+    <div class="toast" id="toast"></div>
+
+    <script src="supabase.js"></script>
+    <script>
+        // ── Developer credentials (separate from admin) ────────────────────────────
+        // Change these to your preferred developer credentials
+        const DEV_USER = 'developer';
+        const DEV_PASS = 'devMAW@2024!';
+        const DEV_SESSION_KEY = 'mawDevAuth';
+
+        let _users = [];
+        let _pendingDeleteEmail = null;
+        let _toastTimer = null;
+
+        // ── Tab switching ──────────────────────────────────────────────────────────
+        function switchTab(tab) {
+            document.getElementById('panel-users').style.display = tab === 'users' ? '' : 'none';
+            document.getElementById('panel-settings').style.display = tab === 'settings' ? '' : 'none';
+            document.getElementById('tab-users').classList.toggle('active', tab === 'users');
+            document.getElementById('tab-settings').classList.toggle('active', tab === 'settings');
+        }
+
+        // ── Clock ──────────────────────────────────────────────────────────────────
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('devClock').textContent =
+                now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+                '  ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // ── Auth ───────────────────────────────────────────────────────────────────
+        function handleDevLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('dev-user').value.trim();
+            const p = document.getElementById('dev-pass').value;
+            const alertEl = document.getElementById('dev-alert');
+
+            const btn = document.getElementById('dev-login-btn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+
+            // Fetch stored password with 3s timeout, fall back to default
+            const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 3000));
+            const fetch   = MAWdb.settings.get('devPass');
+            Promise.race([fetch, timeout])
+                .then(stored => stored || DEV_PASS)
+                .catch(() => DEV_PASS)
+                .then(validPass => {
+                    if (u === DEV_USER && p === validPass) {
+                        _currentDevPass = validPass;
+                        sessionStorage.setItem(DEV_SESSION_KEY, '1');
+                        document.getElementById('devLoginScreen').style.display = 'none';
+                        document.getElementById('devDashboard').style.display = 'block';
+                        initDashboard();
+                    } else {
+                        alertEl.textContent = 'Invalid credentials. Access denied.';
+                        alertEl.classList.add('show');
+                        document.getElementById('dev-pass').value = '';
+                        btn.disabled = true;
+                        setTimeout(() => { btn.disabled = false; btn.textContent = 'Access Dashboard'; }, 2000);
+                    }
+                });
+        }
+
+        function devLogout() {
+            sessionStorage.removeItem(DEV_SESSION_KEY);
+            location.reload();
+        }
+
+        // ── Init ───────────────────────────────────────────────────────────────────
+        async function initDashboard() {
+            await MAWdb.init();
+            await loadDevPass(); // load persisted password if changed before
+            _users = await MAWdb.users.getAll();
+            // Sort newest first by default
+            _users.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            renderStats();
+            renderTable();
+            updateClock();
+            setInterval(updateClock, 1000);
+            // Show username in settings panel
+            document.getElementById('settings-username-display').textContent = DEV_USER;
+        }
+
+        // ── Stats ──────────────────────────────────────────────────────────────────
+        function renderStats() {
+            const now = new Date();
+            const todayStr = now.toISOString().slice(0, 10);
+            const weekAgo = new Date(now - 7 * 86400000).toISOString();
+            const monthAgo = new Date(now - 30 * 86400000).toISOString();
+
+            document.getElementById('stat-total').textContent = _users.length;
+            document.getElementById('stat-today').textContent = _users.filter(u => (u.createdAt || '').startsWith(todayStr)).length;
+            document.getElementById('stat-week').textContent = _users.filter(u => (u.createdAt || '') >= weekAgo).length;
+            document.getElementById('stat-month').textContent = _users.filter(u => (u.createdAt || '') >= monthAgo).length;
+        }
+
+        // ── Table ──────────────────────────────────────────────────────────────────
+        function renderTable() {
+            const q = document.getElementById('devSearch').value.toLowerCase();
+            const sort = document.getElementById('devSort').value;
+
+            let list = [..._users];
+
+            // Filter
+            if (q) list = list.filter(u =>
+                (u.firstName + ' ' + u.lastName).toLowerCase().includes(q) ||
+                (u.email || '').toLowerCase().includes(q) ||
+                (u.phone || '').includes(q) ||
+                ((u.delivery && u.delivery.city) || '').toLowerCase().includes(q) ||
+                ((u.delivery && u.delivery.state) || '').toLowerCase().includes(q)
+            );
+
+            // Sort
+            if (sort === 'newest') list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            else if (sort === 'oldest') list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+            else if (sort === 'name') list.sort((a, b) => (a.firstName || '').localeCompare(b.firstName || ''));
+
+            document.getElementById('recordCount').textContent = list.length + ' record' + (list.length !== 1 ? 's' : '');
+
+            const tbody = document.getElementById('userTableBody');
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="icon">👤</div><p>No users found.</p></div></td></tr>`;
+                return;
+            }
+
+            const now = new Date();
+            const weekAgo = new Date(now - 7 * 86400000).toISOString();
+
+            tbody.innerHTML = list.map((u, i) => {
+                const initials = ((u.firstName || '?')[0] + (u.lastName || '?')[0]).toUpperCase();
+                const isNew = (u.createdAt || '') >= weekAgo;
+                const city = (u.delivery && u.delivery.city) || '—';
+                const state = (u.delivery && u.delivery.state) || '—';
+                const regDate = u.createdAt ? formatDate(u.createdAt) : '—';
+                return `<tr>
+                <td class="mono-cell" style="color:var(--muted);">${String(i + 1).padStart(2, '0')}</td>
+                <td>
+                    <div class="user-cell">
+                        <div class="avatar">${initials}</div>
+                        <div>
+                            <div class="user-name">${u.firstName || ''} ${u.lastName || ''}</div>
+                            <div class="user-id">#${String(u.id || '').slice(-6)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="mono-cell">${u.email || '—'}</td>
+                <td class="mono-cell">${u.phone || '—'}</td>
+                <td>${city}</td>
+                <td>${state}</td>
+                <td class="mono-cell" style="color:var(--muted);">${regDate}</td>
+                <td><span class="badge ${isNew ? 'badge-new' : 'badge-old'}">${isNew ? 'New' : 'Active'}</span></td>
+                <td>
+                    <div style="display:flex;gap:0.4rem;">
+                        <button class="action-btn" onclick="viewUser('${u.email}')">View</button>
+                        <button class="action-btn danger" onclick="confirmDelete('${u.email}')">Delete</button>
+                    </div>
+                </td>
+            </tr>`;
+            }).join('');
+        }
+
+        function formatDate(iso) {
+            try {
+                const d = new Date(iso);
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+                    ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            } catch (_) { return iso; }
+        }
+
+        // ── User Detail ────────────────────────────────────────────────────────────
+        function viewUser(email) {
+            const u = _users.find(x => x.email === email);
+            if (!u) return;
+            const d = u.delivery || {};
+            document.getElementById('detailBody').innerHTML = `
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+                <div class="avatar" style="width:48px;height:48px;font-size:1.1rem;">
+                    ${((u.firstName || '?')[0] + (u.lastName || '?')[0]).toUpperCase()}
+                </div>
+                <div>
+                    <div style="font-size:1.1rem;font-weight:600;">${u.firstName || ''} ${u.lastName || ''}</div>
+                    <div style="font-size:0.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">${u.email}</div>
+                </div>
+            </div>
+            <div class="detail-section">Account Info</div>
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-key">User ID</span><span class="detail-val mono-cell">#${String(u.id || '').slice(-8)}</span></div>
+                <div class="detail-item"><span class="detail-key">Registered</span><span class="detail-val">${u.createdAt ? formatDate(u.createdAt) : '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">First Name</span><span class="detail-val">${u.firstName || '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">Last Name</span><span class="detail-val">${u.lastName || '—'}</span></div>
+                <div class="detail-item full"><span class="detail-key">Email</span><span class="detail-val mono-cell">${u.email || '—'}</span></div>
+                <div class="detail-item full"><span class="detail-key">Phone</span><span class="detail-val mono-cell">${u.phone || '—'}</span></div>
+            </div>
+            <div class="detail-section">Delivery Address</div>
+            <div class="detail-grid">
+                <div class="detail-item full"><span class="detail-key">Street Address</span><span class="detail-val">${d.address || '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">City</span><span class="detail-val">${d.city || '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">State</span><span class="detail-val">${d.state || '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">LGA / District</span><span class="detail-val">${d.lga || '—'}</span></div>
+                <div class="detail-item"><span class="detail-key">Postal Code</span><span class="detail-val mono-cell">${d.postal || '—'}</span></div>
+                <div class="detail-item full"><span class="detail-key">Nearest Landmark</span><span class="detail-val">${d.landmark || '—'}</span></div>
+            </div>`;
+            document.getElementById('detailOverlay').classList.add('show');
+        }
+
+        function closeDetail() { document.getElementById('detailOverlay').classList.remove('show'); }
+
+        // ── Delete ─────────────────────────────────────────────────────────────────
+        function confirmDelete(email) {
+            _pendingDeleteEmail = email;
+            document.getElementById('confirmOverlay').classList.add('show');
+        }
+        function closeConfirm() {
+            _pendingDeleteEmail = null;
+            document.getElementById('confirmOverlay').classList.remove('show');
+        }
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!_pendingDeleteEmail) return;
+            await MAWdb.users.delete(_pendingDeleteEmail);
+            _users = _users.filter(u => u.email !== _pendingDeleteEmail);
+            closeConfirm();
+            renderStats();
+            renderTable();
+            showToast('User deleted', 'success');
+            _pendingDeleteEmail = null;
+        });
+
+        // ── Export CSV ─────────────────────────────────────────────────────────────
+        function exportCSV() {
+            const headers = ['#', 'First Name', 'Last Name', 'Email', 'Phone', 'City', 'State', 'LGA', 'Postal', 'Landmark', 'Registered'];
+            const rows = _users.map((u, i) => {
+                const d = u.delivery || {};
+                return [
+                    i + 1, u.firstName || '', u.lastName || '', u.email || '', u.phone || '',
+                    d.city || '', d.state || '', d.lga || '', d.postal || '', d.landmark || '',
+                    u.createdAt ? new Date(u.createdAt).toLocaleString('en-GB') : ''
+                ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',');
+            });
+            const csv = [headers.join(','), ...rows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'maw-users-' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('CSV exported (' + _users.length + ' users)', 'success');
+        }
+
+        // ── Toast ──────────────────────────────────────────────────────────────────
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+            t.className = 'toast ' + type + ' show';
+            clearTimeout(_toastTimer);
+            _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ── Close modals on overlay click ──────────────────────────────────────────
+        document.getElementById('detailOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closeDetail();
+        });
+        document.getElementById('confirmOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closeConfirm();
+        });
+
+        // ── Keyboard shortcuts ─────────────────────────────────────────────────────
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { closeDetail(); closeConfirm(); }
+        });
+
+        // ── Settings — Change Password ─────────────────────────────────────────────
+        // Developer password is stored in IndexedDB settings store
+        // so it persists across page reloads and survives browser restarts.
+        let _currentDevPass = DEV_PASS; // in-session cache
+
+        async function loadDevPass() {
+            await MAWdb.init();
+            const stored = await MAWdb.settings.get('devPass');
+            if (stored) _currentDevPass = stored;
+            return _currentDevPass;
+        }
+
+        function toggleDevPw(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+            else { input.type = 'password'; btn.textContent = 'Show'; }
+        }
+
+        function checkDevStrength(val) {
+            const fill = document.getElementById('dev-strength-fill');
+            const label = document.getElementById('dev-strength-label');
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            const levels = [
+                { w: '0%', bg: 'var(--border)', text: '' },
+                { w: '25%', bg: 'var(--danger)', text: 'Weak' },
+                { w: '50%', bg: 'var(--warn)', text: 'Fair' },
+                { w: '75%', bg: 'var(--info)', text: 'Good' },
+                { w: '100%', bg: 'var(--success)', text: 'Strong' }
+            ];
+            const l = levels[score];
+            fill.style.width = l.w; fill.style.background = l.bg;
+            label.textContent = l.text; label.style.color = l.bg;
+        }
+
+        function showSettingsAlert(msg, type) {
+            const el = document.getElementById('settings-alert');
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.style.background = type === 'success' ? 'rgba(63,185,80,0.1)' : 'rgba(248,81,73,0.1)';
+            el.style.color = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            el.style.border = type === 'success' ? '1px solid rgba(63,185,80,0.3)' : '1px solid rgba(248,81,73,0.3)';
+        }
+
+        function clearPwForm() {
+            ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.value = ''; el.type = 'password'; }
+            });
+            document.querySelectorAll('#panel-settings button[onclick*="toggleDevPw"]').forEach(b => b.textContent = 'Show');
+            const fill = document.getElementById('dev-strength-fill');
+            const label = document.getElementById('dev-strength-label');
+            const alert = document.getElementById('settings-alert');
+            if (fill) fill.style.width = '0';
+            if (label) label.textContent = '';
+            if (alert) alert.style.display = 'none';
+        }
+
+        async function handleChangePassword(e) {
+        async function handleChangePassword(e) {
+            e.preventDefault();
+            const current = document.getElementById('pw-current').value;
+            const newPw   = document.getElementById('pw-new').value;
+            const confirm = document.getElementById('pw-confirm').value;
+
+            if (!current) { showSettingsAlert('Please enter your current password.', 'error'); return; }
+            if (newPw.length < 8) { showSettingsAlert('New password must be at least 8 characters.', 'error'); return; }
+            if (newPw !== confirm) { showSettingsAlert('New passwords do not match.', 'error'); return; }
+
+            // Always fetch the authoritative password from Supabase
+            let trueCurrentPass;
+            try {
+                trueCurrentPass = (await MAWdb.settings.get('devPass')) || DEV_PASS;
+            } catch (fetchErr) {
+                trueCurrentPass = _currentDevPass || DEV_PASS;
+            }
+
+            if (current !== trueCurrentPass) { showSettingsAlert('Current password is incorrect.', 'error'); return; }
+            if (newPw === trueCurrentPass) { showSettingsAlert('New password must differ from the current one.', 'error'); return; }
+
+            try {
+                await MAWdb.settings.set('devPass', newPw);
+                _currentDevPass = newPw;
+                showSettingsAlert('Password updated successfully! Changes take effect immediately.', 'success');
+                clearPwForm();
+                showToast('Developer password changed', 'success');
+            } catch (saveErr) {
+                console.error('Password save failed:', saveErr);
+                showSettingsAlert('Failed to save password. Please try again.', 'error');
+            }
+        }
+
+        // ── Boot ───────────────────────────────────────────────────────────────────
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem(DEV_SESSION_KEY) === '1') {
+                document.getElementById('devLoginScreen').style.display = 'none';
+                document.getElementById('devDashboard').style.display = 'block';
+                initDashboard();
+            }
+            // Keyboard: Enter on username → focus password
+            document.getElementById('dev-user').addEventListener('keydown', e => {
+                if (e.key === 'Enter') document.getElementById('dev-pass').focus();
+            });
+        });    </script>
+</body>
+
+</html>

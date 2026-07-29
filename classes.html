@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sewing Classes - My African Wear | Learn to Sew African Fashion</title>
+    <meta name="description"
+        content="Book a sewing class with My African Wear. Learn to create authentic African garments from expert artisans.">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'warm-white': '#FDF8F2', 'oat': '#F7EFE0', 'fog-gray': '#EDE5D8', 'charcoal': '#2C2C2C', 'sage': '#D4700A' },
+                    fontFamily: { 'display': ['Canela', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #FDF8F2;
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 248, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #D4700A;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4700A;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #2C2C2C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(253, 248, 242, 0.98);
+            border-top: 1px solid #EDE5D8;
+            padding: 1rem 1.5rem 1.5rem;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a,
+        .mobile-menu span {
+            display: block;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #2C2C2C;
+            text-decoration: none;
+            border-bottom: 1px solid #EDE5D8;
+        }
+
+        .mobile-menu a:last-child,
+        .mobile-menu span:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #D4700A;
+        }
+
+        .nav-cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.9rem 0.38rem 0.65rem;
+            background: #D4700A;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(212, 112, 10, 0.35);
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><img src="resources/logo.jpeg" alt="My African Wear"
+                        style="height:44px;width:auto;object-fit:contain;"></a>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="products.html"
+                            class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Products</a>
+                        <a href="classes.html" class="nav-link px-3 py-2 text-sm font-medium"
+                            style="color:#D4700A;font-weight:600">Classes</a>
+                        <a href="story.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Our Story</a>
+                        <span id="nav-user-area"></span>
+                        <a href="cart.html" class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            Cart <span class="nav-cart-badge" id="navCartBadge" style="display:none;">0</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle menu"
+                        onclick="toggleMobileMenu()">
+                        <svg id="hamburgerIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="closeIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="classes.html" style="color:#D4700A;font-weight:600">Classes</a>
+            <a href="story.html">Our Story</a>
+            <span id="mobile-user-area"></span>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section
+        style="min-height:55vh;display:flex;align-items:center;background:linear-gradient(135deg,#2C2C2C 0%,#4a3728 60%,#D4700A 100%);position:relative;overflow:hidden;padding-top:4rem;">
+        <div
+            style="position:absolute;inset:0;background-image:url('resources/wool-texture.jpg');background-size:cover;background-position:center;opacity:0.1;">
+        </div>
+        <div
+            style="position:relative;z-index:2;max-width:800px;margin:0 auto;padding:5rem 2rem 4rem;text-align:center;">
+            <span
+                style="display:inline-flex;align-items:center;gap:0.6rem;font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4700A;margin-bottom:1.5rem;">
+                <span style="display:block;width:24px;height:2px;background:#D4700A;border-radius:2px;"></span>
+                Learn the Craft
+                <span style="display:block;width:24px;height:2px;background:#D4700A;border-radius:2px;"></span>
+            </span>
+            <h1
+                style="font-family:'Canela',serif;font-size:clamp(2.5rem,7vw,4.5rem);font-weight:300;line-height:1.1;color:#FDF8F2;margin-bottom:1.5rem;">
+                African Sewing Classes</h1>
+            <p style="font-size:1.1rem;color:rgba(253,248,242,0.8);max-width:560px;margin:0 auto;line-height:1.7;">Learn
+                to create authentic African garments from our master artisans. From Kente weaving to Ankara tailoring —
+                book your spot today.</p>
+        </div>
+    </section>
+
+    <!-- What You'll Learn -->
+    <section style="padding:5rem 0;background:#FDF8F2;">
+        <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
+            <div style="text-align:center;margin-bottom:3rem;">
+                <span
+                    style="font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4700A;">The
+                    Curriculum</span>
+                <h2
+                    style="font-family:'Canela',serif;font-size:clamp(1.75rem,4vw,2.75rem);font-weight:300;color:#2C2C2C;margin-top:0.5rem;">
+                    What You Will Learn</h2>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;">
+                <div
+                    style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.07);border-top:4px solid #D4700A;text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:1rem;">🧵</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.2rem;margin-bottom:0.5rem;">Basic Stitching</h3>
+                    <p style="font-size:0.9rem;color:#666;">Master hand and machine stitching techniques used in
+                        traditional African garments.</p>
+                </div>
+                <div
+                    style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.07);border-top:4px solid #2E8B00;text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:1rem;">✂️</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.2rem;margin-bottom:0.5rem;">Pattern Cutting</h3>
+                    <p style="font-size:0.9rem;color:#666;">Learn to cut Ankara, Kente and Aso-Oke fabrics with
+                        precision and minimal waste.</p>
+                </div>
+                <div
+                    style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.07);border-top:4px solid #D4700A;text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:1rem;">👗</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.2rem;margin-bottom:0.5rem;">Garment Assembly</h3>
+                    <p style="font-size:0.9rem;color:#666;">Assemble complete garments — Kaftans, Agbadas, Dresses and
+                        more from scratch.</p>
+                </div>
+                <div
+                    style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.07);border-top:4px solid #2E8B00;text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:1rem;">🎨</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.2rem;margin-bottom:0.5rem;">Fabric & Design</h3>
+                    <p style="font-size:0.9rem;color:#666;">Understand African textile traditions, colour theory and
+                        design principles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Class Tiers -->
+    <section style="padding:5rem 0;background:linear-gradient(160deg,#F7EFE0 0%,#EDE5D8 100%);">
+        <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
+            <div style="text-align:center;margin-bottom:3rem;">
+                <span
+                    style="font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4700A;">Class
+                    Levels</span>
+                <h2
+                    style="font-family:'Canela',serif;font-size:clamp(1.75rem,4vw,2.75rem);font-weight:300;color:#2C2C2C;margin-top:0.5rem;">
+                    Choose Your Level</h2>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
+                <div style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                    <div
+                        style="background:#F7EFE0;border-radius:10px;padding:0.4rem 0.9rem;display:inline-block;font-size:0.78rem;font-weight:700;color:#D4700A;margin-bottom:1rem;text-transform:uppercase;letter-spacing:1px;">
+                        Beginner</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.4rem;margin-bottom:0.5rem;">Foundation Class</h3>
+                    <p style="font-size:0.9rem;color:#666;margin-bottom:1.5rem;">Perfect for those with no sewing
+                        experience. Learn the basics in a friendly, hands-on environment.</p>
+                    <ul style="list-style:none;font-size:0.875rem;color:#555;margin-bottom:1.5rem;">
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ 4-week programme</li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ Small groups (max 8)</li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ All materials provided</li>
+                        <li style="padding:0.3rem 0;">✅ Certificate on completion</li>
+                    </ul>
+                    <a href="#booking-form"
+                        style="display:block;text-align:center;background:#D4700A;color:white;padding:0.85rem;border-radius:10px;text-decoration:none;font-weight:600;transition:background 0.2s;"
+                        onmouseover="this.style.background='#B85E08'" onmouseout="this.style.background='#D4700A'">Book
+                        This Class</a>
+                </div>
+                <div
+                    style="background:#2C2C2C;border-radius:20px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2);position:relative;overflow:hidden;">
+                    <div
+                        style="position:absolute;top:1rem;right:1rem;background:#D4700A;color:white;font-size:0.7rem;font-weight:700;padding:0.25rem 0.6rem;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">
+                        Popular</div>
+                    <div
+                        style="background:rgba(212,112,10,0.2);border-radius:10px;padding:0.4rem 0.9rem;display:inline-block;font-size:0.78rem;font-weight:700;color:#D4700A;margin-bottom:1rem;text-transform:uppercase;letter-spacing:1px;">
+                        Intermediate</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.4rem;margin-bottom:0.5rem;color:#FDF8F2;">Artisan
+                        Class</h3>
+                    <p style="font-size:0.9rem;color:rgba(253,248,242,0.7);margin-bottom:1.5rem;">For those with basic
+                        sewing skills ready to create full African garments.</p>
+                    <ul style="list-style:none;font-size:0.875rem;color:rgba(253,248,242,0.8);margin-bottom:1.5rem;">
+                        <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.1);">✅ 6-week programme
+                        </li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.1);">✅ Small groups (max
+                            6)</li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.1);">✅ Fabric kit
+                            included</li>
+                        <li style="padding:0.3rem 0;">✅ Portfolio of 3 garments</li>
+                    </ul>
+                    <a href="#booking-form"
+                        style="display:block;text-align:center;background:#D4700A;color:white;padding:0.85rem;border-radius:10px;text-decoration:none;font-weight:600;transition:background 0.2s;"
+                        onmouseover="this.style.background='#B85E08'" onmouseout="this.style.background='#D4700A'">Book
+                        This Class</a>
+                </div>
+                <div style="background:white;border-radius:20px;padding:2rem;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                    <div
+                        style="background:#F7EFE0;border-radius:10px;padding:0.4rem 0.9rem;display:inline-block;font-size:0.78rem;font-weight:700;color:#2E8B00;margin-bottom:1rem;text-transform:uppercase;letter-spacing:1px;">
+                        Advanced</div>
+                    <h3 style="font-family:'Canela',serif;font-size:1.4rem;margin-bottom:0.5rem;">Master Class</h3>
+                    <p style="font-size:0.9rem;color:#666;margin-bottom:1.5rem;">For experienced sewers wanting to
+                        master complex African fashion techniques.</p>
+                    <ul style="list-style:none;font-size:0.875rem;color:#555;margin-bottom:1.5rem;">
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ 8-week programme</li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ 1-on-1 mentoring</li>
+                        <li style="padding:0.3rem 0;border-bottom:1px solid #f0ebe4;">✅ Premium fabric kit</li>
+                        <li style="padding:0.3rem 0;">✅ Business starter guide</li>
+                    </ul>
+                    <a href="#booking-form"
+                        style="display:block;text-align:center;background:#D4700A;color:white;padding:0.85rem;border-radius:10px;text-decoration:none;font-weight:600;transition:background 0.2s;"
+                        onmouseover="this.style.background='#B85E08'" onmouseout="this.style.background='#D4700A'">Book
+                        This Class</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section id="booking-form" style="padding:5rem 0;background:#FDF8F2;">
+        <div style="max-width:700px;margin:0 auto;padding:0 2rem;">
+            <div style="text-align:center;margin-bottom:3rem;">
+                <span
+                    style="font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#D4700A;">Reserve
+                    Your Spot</span>
+                <h2
+                    style="font-family:'Canela',serif;font-size:clamp(1.75rem,4vw,2.75rem);font-weight:300;color:#2C2C2C;margin-top:0.5rem;">
+                    Book an Appointment</h2>
+                <p style="color:#888;font-size:0.95rem;margin-top:0.75rem;">Fill in your details and we'll confirm your
+                    class booking within 24 hours.</p>
+            </div>
+
+            <!-- Success message (hidden by default) -->
+            <div id="bookingSuccess"
+                style="display:none;background:#f0fff4;border:1px solid #9ae6b4;border-radius:14px;padding:2rem;text-align:center;margin-bottom:2rem;">
+                <div style="font-size:3rem;margin-bottom:0.75rem;">🎉</div>
+                <h3 style="font-family:'Canela',serif;font-size:1.5rem;color:#276749;margin-bottom:0.5rem;">Booking
+                    Received!</h3>
+                <p style="color:#276749;font-size:0.95rem;">Thank you! We'll contact you within 24 hours to confirm your
+                    class details.</p>
+            </div>
+
+            <!-- Alert -->
+            <div id="bookingAlert"
+                style="display:none;padding:0.75rem 1rem;border-radius:8px;font-size:0.85rem;margin-bottom:1.5rem;background:#fff5f5;color:#e53e3e;border:1px solid #fecaca;">
+            </div>
+
+            <form id="classBookingForm" onsubmit="submitBooking(event); return false;" novalidate
+                style="background:white;border-radius:20px;padding:2.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">First
+                            Name *</label>
+                        <input id="b-fname" type="text" placeholder="Amara" required
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                    </div>
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Last
+                            Name *</label>
+                        <input id="b-lname" type="text" placeholder="Okafor" required
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                    </div>
+                </div>
+                <div style="margin-bottom:1.25rem;">
+                    <label
+                        style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Email
+                        Address *</label>
+                    <input id="b-email" type="email" placeholder="you@example.com" required
+                        style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;"
+                        onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                </div>
+
+                <div style="margin-bottom:1.25rem;">
+                    <label
+                        style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Phone
+                        Number *</label>
+                    <input id="b-phone" type="tel" placeholder="+233 24 000 0000" required
+                        style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;"
+                        onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Class
+                            Level *</label>
+                        <select id="b-level" required
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;background:white;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                            <option value="">Select level</option>
+                            <option value="Beginner">Beginner — Foundation Class</option>
+                            <option value="Intermediate">Intermediate — Artisan Class</option>
+                            <option value="Advanced">Advanced — Master Class</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Preferred
+                            Date *</label>
+                        <input id="b-date" type="date" required
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Preferred
+                            Time</label>
+                        <select id="b-time"
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;background:white;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                            <option value="">Any time</option>
+                            <option value="Morning (8am–12pm)">Morning (8am–12pm)</option>
+                            <option value="Afternoon (12pm–4pm)">Afternoon (12pm–4pm)</option>
+                            <option value="Evening (4pm–7pm)">Evening (4pm–7pm)</option>
+                            <option value="Weekend">Weekend</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Sewing
+                            Experience</label>
+                        <select id="b-experience"
+                            style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;background:white;"
+                            onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'">
+                            <option value="None">No experience</option>
+                            <option value="Some">Some experience</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-bottom:1.75rem;">
+                    <label
+                        style="display:block;font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Message
+                        / Special Requests</label>
+                    <textarea id="b-message" rows="3"
+                        placeholder="Tell us anything we should know — goals, accessibility needs, questions..."
+                        style="width:100%;padding:0.75rem 1rem;border:2px solid #e8e0d8;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;font-family:inherit;resize:vertical;"
+                        onfocus="this.style.borderColor='#D4700A'" onblur="this.style.borderColor='#e8e0d8'"></textarea>
+                </div>
+                <button type="submit" id="bookingSubmitBtn"
+                    style="width:100%;background:#D4700A;color:white;border:none;padding:1rem;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:background 0.2s;"
+                    onmouseover="this.style.background='#B85E08'" onmouseout="this.style.background='#D4700A'">
+                    Book My Class
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section style="padding:5rem 0;background:linear-gradient(160deg,#F7EFE0 0%,#EDE5D8 100%);">
+        <div style="max-width:700px;margin:0 auto;padding:0 2rem;">
+            <div style="text-align:center;margin-bottom:3rem;">
+                <h2
+                    style="font-family:'Canela',serif;font-size:clamp(1.75rem,4vw,2.5rem);font-weight:300;color:#2C2C2C;">
+                    Frequently Asked Questions</h2>
+            </div>
+            <div id="faqList"></div>
+        </div>
+    </section>
+
+    <footer style="background:#1a1a1a;color:white;padding:2rem 0;text-align:center;">
+        <p style="opacity:0.7;">&copy; 2024 My African Wear. Celebrating African heritage through fashion.</p>
+    </footer>
+
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // ── Set min date to today ──────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('b-date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+
+            // Render FAQ
+            const faqs = [
+                { q: 'Do I need to bring my own sewing machine?', a: 'No — all equipment is provided. You are welcome to bring your own if you prefer.' },
+                { q: 'How many students are in each class?', a: 'We keep classes small: max 8 for Beginner, 6 for Intermediate, and 1-on-1 mentoring for Advanced.' },
+                { q: 'What should I wear to class?', a: 'Comfortable clothing you don\'t mind getting fabric dust on. Closed-toe shoes are recommended.' },
+                { q: 'Can I cancel or reschedule?', a: 'Yes — contact us at least 48 hours before your class to reschedule at no charge.' },
+                { q: 'Are classes available online?', a: 'Currently all classes are in-person. We are exploring online options — join our newsletter to be notified.' },
+                { q: 'Will I make a garment in the first class?', a: 'Beginner students complete their first simple garment by week 2. Intermediate and Advanced students start garment work from day one.' }
+            ];
+            document.getElementById('faqList').innerHTML = faqs.map((f, i) => `
+            <div style="background:white;border-radius:14px;margin-bottom:1rem;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                <button onclick="toggleFaq(${i})" style="width:100%;text-align:left;padding:1.25rem 1.5rem;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem;font-weight:600;color:#2C2C2C;">
+                    ${f.q}
+                    <span id="faq-icon-${i}" style="font-size:1.2rem;color:#D4700A;transition:transform 0.2s;flex-shrink:0;margin-left:1rem;">+</span>
+                </button>
+                <div id="faq-body-${i}" style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#666;line-height:1.7;">${f.a}</div>
+            </div>`).join('');
+        });
+
+        function toggleFaq(i) {
+            const body = document.getElementById('faq-body-' + i);
+            const icon = document.getElementById('faq-icon-' + i);
+            const open = body.style.display === 'block';
+            body.style.display = open ? 'none' : 'block';
+            icon.textContent = open ? '+' : '−';
+        }
+
+        // ── Booking form submission ────────────────────────────────────────────────
+        async function submitBooking(e) {
+            e.preventDefault();
+            const alert = document.getElementById('bookingAlert');
+            alert.style.display = 'none';
+
+            const fname = document.getElementById('b-fname').value.trim();
+            const lname = document.getElementById('b-lname').value.trim();
+            const email = document.getElementById('b-email').value.trim().toLowerCase();
+            const phone = document.getElementById('b-phone').value.trim();
+            const level = document.getElementById('b-level').value;
+            const date = document.getElementById('b-date').value;
+            const time = document.getElementById('b-time').value;
+            const exp = document.getElementById('b-experience').value;
+            const message = document.getElementById('b-message').value.trim();
+
+            // Validation
+            if (!fname || !lname) { showAlert('Please enter your full name.'); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAlert('Please enter a valid email address.'); return; }
+            if (!phone || phone.replace(/\D/g, '').length < 10) { showAlert('Please enter a valid phone number.'); return; }
+            if (!level) { showAlert('Please select a class level.'); return; }
+            if (!date) { showAlert('Please select a preferred date.'); return; }
+
+            const btn = document.getElementById('bookingSubmitBtn');
+            btn.textContent = 'Submitting…';
+            btn.disabled = true;
+
+            await MAWdb.init();
+            const booking = {
+                firstName: fname, lastName: lname, email, phone,
+                level, preferredDate: date, preferredTime: time || 'Any time',
+                experience: exp, message,
+                status: 'pending',
+                submittedAt: new Date().toISOString()
+            };
+            await MAWdb.bookings.add(booking);
+
+            document.getElementById('classBookingForm').style.display = 'none';
+            document.getElementById('bookingSuccess').style.display = 'block';
+            document.getElementById('bookingSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showAlert(msg) {
+            const el = document.getElementById('bookingAlert');
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburgerIcon');
+            const close = document.getElementById('closeIcon');
+            const isOpen = menu.classList.toggle('open');
+            document.getElementById('mobileMenuBtn').setAttribute('aria-expanded', isOpen);
+            hamburger.style.display = isOpen ? 'none' : 'block';
+            close.style.display = isOpen ? 'block' : 'none';
+        }
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            navbar.style.boxShadow = window.scrollY > 50 ? '0 2px 20px rgba(0,0,0,0.1)' : 'none';
+        });
+    </script>
+</body>
+
+</html>

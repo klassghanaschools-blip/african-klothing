@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - My African Wear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(44, 44, 44, 0.94) 0%, rgba(74, 55, 40, 0.90) 60%, rgba(212, 112, 10, 0.88) 100%),
+                url('resources/hero-urban.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-area a {
+            text-decoration: none;
+        }
+
+        .logo-area img {
+            height: 64px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-area p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            background: #2C2C2C;
+            padding: 1.75rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #FDF8F2;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-header p {
+            font-size: 0.82rem;
+            color: rgba(253, 248, 242, 0.55);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .field-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .field-input {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .field-input:focus {
+            border-color: #D4700A;
+        }
+
+        .field-input.error {
+            border-color: #e53e3e;
+            background: #fff5f5;
+        }
+
+        .pw-wrap {
+            position: relative;
+        }
+
+        .pw-wrap .field-input {
+            padding-right: 2.8rem;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .toggle-pw:hover {
+            color: #D4700A;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 0.25rem;
+        }
+
+        .submit-btn:hover {
+            background: #B85E08;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.error {
+            background: #fff5f5;
+            color: #e53e3e;
+            border: 1px solid #fecaca;
+            display: block;
+        }
+
+        .alert.success {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link a:hover {
+            color: white;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.25rem 0;
+            font-size: 0.78rem;
+            color: #aaa;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 42%;
+            height: 1px;
+            background: #e8e0d8;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        /* Forgot password panel */
+        #fpPanel {
+            display: none;
+        }
+
+        #loginPanel {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="logo-area">
+            <a href="index.html">
+                <img src="resources/logo.jpeg" alt="My African Wear">
+                <p>Admin Portal</p>
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h1>Admin Sign In</h1>
+                <p>Restricted access — authorised personnel only</p>
+            </div>
+            <div class="card-body">
+
+                <!-- ── LOGIN PANEL ── -->
+                <div id="loginPanel">
+                    <div id="login-alert" class="alert"></div>
+                    <!-- Mock credentials hint -->
+                    <div
+                        style="background:#f9f6f2;border:1px solid #e8e0d8;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:#666;line-height:1.7;">
+                        <strong style="color:#D4700A;">Admin Login:</strong><br>
+                        Username: <code
+                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">admin</code>&nbsp;&nbsp;
+                        Password: <code
+                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">myafricanwear2024Admin@mfw2026</code>
+                    </div>
+                    <form id="loginForm" onsubmit="handleAdminLogin(event); return false;" novalidate>
+                        <div class="field-group">
+                            <label class="field-label" for="a-user">Username</label>
+                            <input class="field-input" type="text" id="a-user" placeholder="admin"
+                                autocomplete="username" required>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="a-pass">Password</label>
+                            <div class="pw-wrap">
+                                <input class="field-input" type="password" id="a-pass" placeholder="••••••••"
+                                    autocomplete="current-password" required>
+                                <button type="button" class="toggle-pw" onclick="togglePw('a-pass',this)">Show</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn" id="login-btn">Sign In to Dashboard</button>
+                    </form>
+                    <div class="divider">or</div>
+                    <div style="text-align:center;">
+                        <a onclick="showFpPanel()"
+                            style="font-size:0.85rem;color:#D4700A;cursor:pointer;font-weight:600;"
+                            onmouseover="this.style.textDecoration='underline'"
+                            onmouseout="this.style.textDecoration='none'">Forgot admin password?</a>
+                    </div>
+                </div>
+
+                <!-- ── FORGOT PASSWORD PANEL ── -->
+                <div id="fpPanel">
+                    <div style="text-align:center;margin-bottom:1.5rem;">
+                        <div style="font-size:2rem;margin-bottom:0.5rem;">🔑</div>
+                        <h2 style="font-family:'Canela',serif;font-size:1.3rem;color:#2C2C2C;margin-bottom:0.3rem;">
+                            Reset Admin Password</h2>
+                        <p style="font-size:0.82rem;color:#888;">Enter the admin recovery email to receive the current
+                            password.</p>
+                    </div>
+                    <div id="fp-alert" class="alert"></div>
+                    <form id="fpForm" onsubmit="handleAdminForgot(event); return false;" novalidate>
+                        <div class="field-group">
+                            <label class="field-label" for="fp-email">Recovery Email</label>
+                            <input class="field-input" type="email" id="fp-email" placeholder="admin@myafricanwear.com"
+                                autocomplete="email" required>
+                        </div>
+                        <button type="submit" class="submit-btn" id="fp-btn">Send Recovery Email</button>
+                    </form>
+                    <div style="text-align:center;margin-top:1rem;">
+                        <a onclick="showLoginPanel()" style="font-size:0.82rem;color:#888;cursor:pointer;"
+                            onmouseover="this.style.color='#D4700A'" onmouseout="this.style.color='#888'">← Back to Sign
+                            In</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Back to store</a>
+        </div>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script>
+        // ── EmailJS config ─────────────────────────────────────────────────────────
+        // SETUP (5 min): https://www.emailjs.com
+        // 1. Create free account → Add Email Service (Gmail/Outlook) → copy Service ID
+        // 2. Create Email Template with: {{to_email}}, {{to_name}}, {{password}}
+        //    Subject: "My African Wear Admin Password Recovery"
+        //    Body: "Hi {{to_name}}, your admin password is: {{password}}"
+        // 3. Account → API Keys → copy Public Key
+        const EMAILJS_SERVICE_ID = 'service_vl7sk6v';
+        const EMAILJS_TEMPLATE_ID = 'template_axkmt56r';
+        const EMAILJS_PUBLIC_KEY = 'gGJGK4A-8Om25exR';
+
+        // Admin recovery email — set this to the admin's real email address
+        // This is the email that will receive the password reset
+        const ADMIN_RECOVERY_EMAIL = 'agyeialbert137@gmail.com'; // change later
+        const ADMIN_RECOVERY_NAME = 'Admin';
+
+        const ADMIN_USER = 'admin';
+        const ADMIN_PASS_DEFAULT = 'myafricanwear2024Admin@mfw2026';
+
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+
+        // ── Check if already authenticated ────────────────────────────────────────
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (sessionStorage.getItem('afriAdminAuth') === '1') {
+                window.location.href = 'admin.html';
+                return;
+            }
+            await MAWdb.init();
+            // Keyboard shortcuts
+            document.getElementById('a-user').addEventListener('keydown', e => {
+                if (e.key === 'Enter') document.getElementById('a-pass').focus();
+            });
+        });
+
+        // ── Panel switching ────────────────────────────────────────────────────────
+        function showFpPanel() {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('fpPanel').style.display = 'block';
+            document.getElementById('fp-email').value = '';
+            document.getElementById('fp-alert').className = 'alert';
+            document.getElementById('fp-alert').textContent = '';
+        }
+
+        function showLoginPanel() {
+            document.getElementById('fpPanel').style.display = 'none';
+            document.getElementById('loginPanel').style.display = 'block';
+            document.getElementById('login-alert').className = 'alert';
+            document.getElementById('login-alert').textContent = '';
+        }
+
+        // ── Password toggle ────────────────────────────────────────────────────────
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+            else { input.type = 'password'; btn.textContent = 'Show'; }
+        }
+
+        // ── Alert helpers ──────────────────────────────────────────────────────────
+        function showLoginAlert(msg, type) {
+            const el = document.getElementById('login-alert');
+            el.textContent = msg;
+            el.className = 'alert ' + type;
+        }
+
+        function showFpAlert(msg, type) {
+            const el = document.getElementById('fp-alert');
+            el.textContent = msg;
+            el.className = 'alert ' + type;
+        }
+
+        // ── Admin Login ────────────────────────────────────────────────────────────
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('a-user').value.trim();
+            const password = document.getElementById('a-pass').value;
+
+            if (!username || !password) {
+                showLoginAlert('Please enter your username and password.', 'error'); return;
+            }
+
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in…';
+
+            // Check against hardcoded defaults FIRST (instant, no network needed)
+            const isAdmin = username === ADMIN_USER && password === ADMIN_PASS_DEFAULT;
+            const isDev = username === 'developer' && password === 'devMAW@2024!';
+
+            if (isAdmin) {
+                sessionStorage.setItem('afriAdminAuth', '1');
+                showLoginAlert('Welcome back, Admin! Redirecting…', 'success');
+                setTimeout(() => { window.location.href = 'admin.html'; }, 600);
+                return;
+            }
+            if (isDev) {
+                sessionStorage.setItem('mawDevAuth', '1');
+                showLoginAlert('Developer access granted. Redirecting…', 'success');
+                setTimeout(() => { window.location.href = 'dev-dashboard.html'; }, 600);
+                return;
+            }
+
+            // If not a match with defaults, try fetching from Supabase (password may have been changed)
+            try {
+                const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 3000));
+                const fetches = Promise.all([MAWdb.settings.get('adminPass'), MAWdb.settings.get('devPass')]);
+                const [ap, dp] = await Promise.race([fetches, timeout]);
+                if (username === ADMIN_USER && password === (ap || ADMIN_PASS_DEFAULT)) {
+                    sessionStorage.setItem('afriAdminAuth', '1');
+                    showLoginAlert('Welcome back, Admin! Redirecting…', 'success');
+                    setTimeout(() => { window.location.href = 'admin.html'; }, 600);
+                    return;
+                }
+                if (username === 'developer' && password === (dp || 'devMAW@2024!')) {
+                    sessionStorage.setItem('mawDevAuth', '1');
+                    showLoginAlert('Developer access granted. Redirecting…', 'success');
+                    setTimeout(() => { window.location.href = 'dev-dashboard.html'; }, 600);
+                    return;
+                }
+            } catch (_) { /* timeout or network error — already checked defaults above */ }
+
+            showLoginAlert('Incorrect username or password. Please try again.', 'error');
+            document.getElementById('a-pass').value = '';
+            btn.disabled = false;
+            btn.textContent = 'Sign In to Dashboard';
+        }
+
+        // ── Admin Forgot Password ──────────────────────────────────────────────────
+        async function handleAdminForgot(e) {
+            e.preventDefault();
+            const email = document.getElementById('fp-email').value.trim().toLowerCase();
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showFpAlert('Please enter a valid email address.', 'error'); return;
+            }
+
+            // Verify it matches the configured recovery email
+            if (email !== ADMIN_RECOVERY_EMAIL.toLowerCase()) {
+                // Same message regardless — don't reveal if email is wrong
+                showFpAlert('If that email is registered, the password has been sent.', 'success');
+                return;
+            }
+
+            const btn = document.getElementById('fp-btn');
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+
+            await MAWdb.init();
+            const currentPass = (await MAWdb.settings.get('adminPass')) || ADMIN_PASS_DEFAULT;
+
+            const isConfigured = true; // EmailJS credentials configured
+
+            if (isConfigured && typeof emailjs !== 'undefined') {
+                try {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        to_email: ADMIN_RECOVERY_EMAIL,
+                        to_name: ADMIN_RECOVERY_NAME,
+                        password: currentPass
+                    });
+                    showFpAlert('Password sent to ' + ADMIN_RECOVERY_EMAIL + '. Check your inbox.', 'success');
+                } catch (err) {
+                    console.error('EmailJS error:', err);
+                    showFpAlert('Email failed to send. Your current password is: ' + currentPass, 'success');
+                }
+            } else {
+                // EmailJS not yet configured — show password directly as fallback
+                showFpAlert('EmailJS not configured. Current admin password: ' + currentPass, 'success');
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Send Recovery Email';
+        }
+    </script>
+</body>
+
+</html>

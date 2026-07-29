@@ -1,0 +1,1165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story - My African Wear | Rooted in Culture, Dressed for Today</title>
+    <meta name="description"
+        content="Learn about My African Wear's journey &mdash; celebrating African heritage through authentic Kente, Ankara, Aso-Oke, and Dashiki garments crafted by skilled artisans.">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Suisse+Int'l:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'warm-white': '#FDF8F2', 'oat': '#F7EFE0',
+                        'fog-gray': '#EDE5D8', 'charcoal': '#2C2C2C', 'sage': '#D4700A'
+                    },
+                    fontFamily: { 'display': ['Canela', 'serif'], 'body': ["Suisse Int'l", 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #FDF8F2;
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        /* -- Navbar -- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 248, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #D4700A;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4700A;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #2C2C2C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(253, 248, 242, 0.98);
+            border-top: 1px solid #EDE5D8;
+            padding: 1rem 1.5rem 1.5rem;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a,
+        .mobile-menu span {
+            display: block;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #2C2C2C;
+            text-decoration: none;
+            border-bottom: 1px solid #EDE5D8;
+        }
+
+        .mobile-menu a:last-child,
+        .mobile-menu span:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #D4700A;
+        }
+
+        /* -- Hero -- */
+        .story-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #2C2C2C 0%, #4a3728 60%, #D4700A 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 4rem;
+        }
+
+        .story-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('resources/hero-nature.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.12;
+        }
+
+        .story-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .story-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #D4700A;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-hero-eyebrow::before,
+        .story-hero-eyebrow::after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #D4700A;
+            border-radius: 2px;
+        }
+
+        .story-hero-title {
+            font-family: 'Canela', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: #FDF8F2;
+            margin-bottom: 1.5rem;
+        }
+
+        .story-hero-title span {
+            color: #D4700A;
+        }
+
+        .story-hero-sub {
+            font-size: 1.1rem;
+            color: rgba(253, 248, 242, 0.75);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* -- Sections -- */
+        .story-section {
+            padding: 6rem 0;
+        }
+
+        .story-section.alt {
+            background: linear-gradient(160deg, #F7EFE0 0%, #EDE5D8 100%);
+        }
+
+        .story-section.dark {
+            background: #2C2C2C;
+            color: white;
+        }
+
+        .story-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* -- Split layout -- */
+        .story-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .story-split.reverse {
+            direction: rtl;
+        }
+
+        .story-split.reverse>* {
+            direction: ltr;
+        }
+
+        .story-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #D4700A;
+            margin-bottom: 1rem;
+        }
+
+        .story-eyebrow::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #D4700A;
+            border-radius: 2px;
+        }
+
+        .story-heading {
+            font-family: 'Canela', serif;
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 300;
+            line-height: 1.25;
+            color: #2C2C2C;
+            margin-bottom: 1.25rem;
+        }
+
+        .story-section.dark .story-heading {
+            color: #FDF8F2;
+        }
+
+        .story-body {
+            font-size: 1rem;
+            line-height: 1.85;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .story-section.dark .story-body {
+            color: rgba(253, 248, 242, 0.7);
+        }
+
+        .story-img {
+            width: 100%;
+            border-radius: 24px;
+            object-fit: cover;
+            aspect-ratio: 4/5;
+            display: block;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        /* -- Stats strip -- */
+        .story-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #d9cfc4;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 5rem 0;
+        }
+
+        .story-stat {
+            background: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: background 0.2s ease;
+        }
+
+        .story-stat:first-child {
+            border-radius: 20px 0 0 20px;
+        }
+
+        .story-stat:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+
+        .story-stat:hover {
+            background: #FDF8F2;
+        }
+
+        .story-stat-value {
+            font-family: 'Canela', serif;
+            font-size: 2.25rem;
+            font-weight: 400;
+            color: #D4700A;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .story-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* -- Values grid -- */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            background: rgba(212, 112, 10, 0.15);
+            border-color: rgba(212, 112, 10, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .value-title {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            color: #FDF8F2;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-desc {
+            font-size: 0.875rem;
+            color: rgba(253, 248, 242, 0.6);
+            line-height: 1.6;
+        }
+
+        /* -- Textiles grid -- */
+        .textiles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .textile-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .textile-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+        }
+
+        .textile-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        .textile-info {
+            padding: 1.25rem 1.5rem;
+        }
+
+        .textile-name {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            color: #2C2C2C;
+            margin-bottom: 0.3rem;
+        }
+
+        .textile-origin {
+            font-size: 0.8rem;
+            color: #D4700A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .textile-desc {
+            font-size: 0.875rem;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* -- CTA section -- */
+        .story-cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #D4700A 0%, #B85E08 100%);
+            text-align: center;
+        }
+
+        .story-cta-title {
+            font-family: 'Canela', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .story-cta-sub {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .story-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: #D4700A;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-cta-btn:hover {
+            background: #2C2C2C;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-cta-btn svg {
+            transition: transform 0.2s ease;
+        }
+
+        .story-cta-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* -- Cart Button ---------------------------------------------------------- */
+        .nav-cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.9rem 0.38rem 0.65rem;
+            background: #D4700A;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(212, 112, 10, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 16px rgba(212, 112, 10, 0.5);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .float-cart-btn {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            background: #D4700A;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(212, 112, 10, 0.5);
+            z-index: 1100;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        @media (max-width: 768px) {
+            .float-cart-btn {
+                display: flex;
+            }
+
+            .nav-cart-btn {
+                display: none;
+            }
+        }
+
+        .float-cart-btn:hover {
+            background: #B85E08;
+            transform: scale(1.08);
+        }
+
+        .float-cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 19px;
+            height: 19px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 3px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes cart-bounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            30% {
+                transform: translateY(-4px) scale(1.1);
+            }
+
+            60% {
+                transform: translateY(-1px) scale(1.04);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes badge-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.6);
+                background: #e53e3e;
+            }
+
+            100% {
+                transform: scale(1);
+                background: #2C2C2C;
+            }
+        }
+
+        .nav-cart-btn.cart-bounce,
+        .float-cart-btn.cart-bounce {
+            animation: cart-bounce 0.55s cubic-bezier(.36, .07, .19, .97);
+        }
+
+        .nav-cart-badge.badge-pop,
+        .float-cart-badge.badge-pop {
+            animation: badge-pop 0.4s ease;
+        }
+
+        /* -- Animate on scroll -- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* -- Responsive -- */
+
+        /* Tablet  900px */
+        @media (max-width: 900px) {
+            .story-hero {
+                min-height: 55vh;
+            }
+
+            .story-hero-content {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            .story-split {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .story-split.reverse {
+                direction: ltr;
+            }
+
+            .story-img {
+                aspect-ratio: 16 / 9;
+                max-height: 360px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .textiles-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+            }
+
+            .story-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .story-stat:first-child {
+                border-radius: 20px 0 0 0;
+            }
+
+            .story-stat:last-child {
+                border-radius: 0 0 20px 0;
+            }
+
+            .story-stat:nth-child(2) {
+                border-radius: 0 20px 0 0;
+            }
+
+            .story-stat:nth-child(3) {
+                border-radius: 0 0 0 20px;
+            }
+
+            .story-section {
+                padding: 4rem 0;
+            }
+
+            .story-container {
+                padding: 0 1.25rem;
+            }
+
+            .story-heading {
+                font-size: clamp(1.5rem, 3.5vw, 2rem);
+            }
+
+            .story-cta-section {
+                padding: 4rem 0;
+            }
+
+            .story-cta-title {
+                font-size: clamp(1.75rem, 5vw, 2.5rem);
+            }
+        }
+
+        /* Mobile  600px */
+        @media (max-width: 600px) {
+            .story-hero {
+                min-height: 50vh;
+            }
+
+            .story-hero-content {
+                padding: 3.5rem 1rem 2.5rem;
+            }
+
+            .story-hero-eyebrow {
+                font-size: 0.7rem;
+            }
+
+            .story-section {
+                padding: 3rem 0;
+            }
+
+            .story-container {
+                padding: 0 1rem;
+            }
+
+            .story-split {
+                gap: 1.5rem;
+            }
+
+            .story-img {
+                aspect-ratio: 4 / 3;
+                border-radius: 16px;
+            }
+
+            .story-heading {
+                font-size: clamp(1.35rem, 5vw, 1.75rem);
+                margin-bottom: 1rem;
+            }
+
+            .story-body {
+                font-size: 0.95rem;
+            }
+
+            .story-eyebrow {
+                font-size: 0.7rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 0.875rem;
+            }
+
+            .value-card {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .textiles-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .story-stats {
+                grid-template-columns: 1fr 1fr;
+                margin: 3rem 0;
+            }
+
+            .story-stat {
+                padding: 1.5rem 1rem;
+            }
+
+            .story-stat-value {
+                font-size: 1.75rem;
+            }
+
+            .story-stat-label {
+                font-size: 0.72rem;
+            }
+
+            .story-cta-section {
+                padding: 3rem 1rem;
+            }
+
+            .story-cta-title {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+
+            .story-cta-sub {
+                font-size: 0.95rem;
+                padding: 0 0.5rem;
+            }
+
+            .story-cta-btn {
+                padding: 0.85rem 1.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Very small  400px */
+        @media (max-width: 400px) {
+            .story-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .story-stat-value {
+                font-size: 1.5rem;
+            }
+
+            .story-hero-content {
+                padding: 3rem 0.75rem 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- -- Navbar -- -->
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><img src="resources/logo.jpeg" alt="My African Wear"
+                        style="height:44px;width:auto;object-fit:contain;"></a>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="products.html"
+                            class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Products</a>
+                        <a href="classes.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Classes</a>
+                        <a href="orders.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">My Orders</a>
+                        <a href="story.html" class="nav-link px-3 py-2 text-sm font-medium"
+                            style="color:#D4700A;font-weight:600">Our Story</a>
+                        <span id="nav-user-area"></span>
+                        <a href="cart.html" class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            Cart
+                            <span class="nav-cart-badge" id="navCartBadge" style="display:none;">0</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false"
+                        onclick="toggleMobileMenu()">
+                        <svg id="hamburgerIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="closeIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="classes.html">Classes</a>
+            <a href="orders.html">My Orders</a>
+            <a href="story.html" style="color:#D4700A;font-weight:600">Our Story</a>
+            <span id="mobile-user-area"></span>
+        </div>
+    </nav>
+
+    <!-- -- Hero -- -->
+    <section class="story-hero">
+        <div class="story-hero-bg"></div>
+        <div class="story-hero-content">
+            <span class="story-hero-eyebrow">Our Story</span>
+            <h1 class="story-hero-title">Rooted in Culture,<br><span>Dressed for Today</span></h1>
+            <p class="story-hero-sub">At My African Wear, every garment is a living expression of identity &mdash; honouring
+                centuries of African textile tradition while fitting seamlessly into modern life.</p>
+        </div>
+    </section>
+
+    <!-- -- Origin story -- -->
+    <section class="story-section">
+        <div class="story-container">
+            <div class="story-split animate-on-scroll">
+                <div>
+                    <span class="story-eyebrow">Where It Began</span>
+                    <h2 class="story-heading">A Deep Respect for African Textile Traditions</h2>
+                    <p class="story-body">My African Wear was born from a simple belief: that fashion is a living
+                        expression of
+                        identity. Our journey began with a deep respect for the rich textile traditions of Africa &mdash; from
+                        the hand-woven Kente of Ghana to the vibrant Ankara prints of West Africa and the regal Aso-Oke
+                        of Nigeria.</p>
+                    <p class="story-body">We saw a gap between the extraordinary craftsmanship of African artisans and
+                        the global stage they deserved. So we set out to bridge it &mdash; bringing authentic, beautifully
+                        made garments to people who want to wear their culture with pride.</p>
+                </div>
+                <div>
+                    <img src="resources/product-1.jpg" alt="Kente Agbada &mdash; the garment that started it all"
+                        class="story-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- Stats strip -- -->
+    <section class="story-section alt" style="padding: 4rem 0;">
+        <div class="story-container">
+            <div class="story-stats animate-on-scroll">
+                <div class="story-stat">
+                    <div class="story-stat-value">12+</div>
+                    <div class="story-stat-label">Garment Styles</div>
+                </div>
+                <div class="story-stat">
+                    <div class="story-stat-value">6</div>
+                    <div class="story-stat-label">African Traditions</div>
+                </div>
+                <div class="story-stat">
+                    <div class="story-stat-value">100%</div>
+                    <div class="story-stat-label">Authentic Fabrics</div>
+                </div>
+                <div class="story-stat">
+                    <div class="story-stat-value">2</div>
+                    <div class="story-stat-label">Genders Served</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- Artisans -- -->
+    <section class="story-section alt">
+        <div class="story-container">
+            <div class="story-split reverse animate-on-scroll">
+                <div>
+                    <img src="resources/product-5.jpg" alt="Aso-Oke Gele Set &mdash; handwoven by skilled artisans"
+                        class="story-img">
+                </div>
+                <div>
+                    <span class="story-eyebrow">The Makers</span>
+                    <h2 class="story-heading">Skilled Artisans, Centuries of Craft</h2>
+                    <p class="story-body">We work directly with skilled artisans and weavers across West Africa. These
+                        are craftspeople who have inherited their techniques through generations &mdash; families who have
+                        been weaving Kente since childhood, dyers who know the exact temperature to set an Ankara print,
+                        tailors who can cut an Agbada with their eyes closed.</p>
+                    <p class="story-body">Every piece in our collection is made by hand. That means no two garments are
+                        exactly alike, and every stitch carries the story of the person who made it. When you wear
+                        My African Wear, you wear their work, their heritage, and their pride.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- Textiles -- -->
+    <section class="story-section">
+        <div class="story-container">
+            <div class="animate-on-scroll" style="text-align:center;margin-bottom:1rem">
+                <span class="story-eyebrow" style="justify-content:center">The Fabrics</span>
+                <h2 class="story-heading" style="max-width:600px;margin:0 auto 0.75rem">Six Traditions, One Collection
+                </h2>
+                <p style="color:#888;font-size:0.95rem;max-width:500px;margin:0 auto">Each fabric we use carries
+                    centuries of cultural meaning. Here are the traditions at the heart of My African Wear.</p>
+            </div>
+            <div class="textiles-grid">
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-1.jpg" alt="Kente fabric" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">Ghana</div>
+                        <h3 class="textile-name">Kente</h3>
+                        <p class="textile-desc">Hand-woven silk and cotton strips sewn together into bold geometric
+                            patterns. Each colour and pattern carries specific meaning in Ghanaian culture.</p>
+                    </div>
+                </div>
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-2.jpg" alt="Ankara fabric" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">West Africa</div>
+                        <h3 class="textile-name">Ankara</h3>
+                        <p class="textile-desc">Vibrant wax-resist dyed cotton with bold, colourful prints. Ankara is
+                            the heartbeat of West African street fashion and ceremonial dress alike.</p>
+                    </div>
+                </div>
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-5.jpg" alt="Aso-Oke fabric" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">Nigeria</div>
+                        <h3 class="textile-name">Aso-Oke</h3>
+                        <p class="textile-desc">A hand-loomed Yoruba fabric woven in narrow strips and sewn together.
+                            Worn at weddings, naming ceremonies, and celebrations of life's milestones.</p>
+                    </div>
+                </div>
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-3.jpg" alt="Dashiki fabric" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">West Africa</div>
+                        <h3 class="textile-name">Dashiki</h3>
+                        <p class="textile-desc">A colourful garment covering the upper body, featuring intricate
+                            embroidery around the collar and chest. A symbol of African pride worldwide.</p>
+                    </div>
+                </div>
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-7.jpg" alt="Boubou fabric" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">Senegal / Mali</div>
+                        <h3 class="textile-name">Boubou</h3>
+                        <p class="textile-desc">A flowing, wide-sleeved robe embroidered with intricate patterns. The
+                            grand Boubou is the pinnacle of West African formal dress for men.</p>
+                    </div>
+                </div>
+                <div class="textile-card animate-on-scroll">
+                    <img src="resources/product-9.jpg" alt="Ankara Wrap Dress" class="textile-img">
+                    <div class="textile-info">
+                        <div class="textile-origin">Pan-African</div>
+                        <h3 class="textile-name">Wrap Styles</h3>
+                        <p class="textile-desc">From wrap dresses to skirt sets, Ankara wrap styles celebrate the female
+                            form with bold prints and silhouettes that honour African femininity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- Values (dark section) -- -->
+    <section class="story-section dark">
+        <div class="story-container">
+            <div class="animate-on-scroll" style="text-align:center;margin-bottom:1rem">
+                <span class="story-eyebrow" style="justify-content:center;color:#D4700A">What We Stand For</span>
+                <h2 class="story-heading" style="max-width:600px;margin:0 auto 0.75rem;color:#FDF8F2">Our Values</h2>
+                <p style="color:rgba(253,248,242,0.6);font-size:0.95rem;max-width:500px;margin:0 auto">Every decision we
+                    make &mdash; from the artisans we partner with to the fabrics we source &mdash; is guided by these four
+                    commitments.</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card animate-on-scroll">
+                    <span class="value-icon">&#129309;</span>
+                    <h3 class="value-title">Artisan First</h3>
+                    <p class="value-desc">We pay fair prices directly to the artisans who make our garments, cutting out
+                        middlemen and ensuring the people who do the work are the ones who benefit.</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <span class="value-icon">&#10024;</span>
+                    <h3 class="value-title">Authentic Always</h3>
+                    <p class="value-desc">We never compromise on authenticity. Every fabric is sourced from its region
+                        of origin, and every technique is the real thing &mdash; not a mass-produced imitation.</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <span class="value-icon">&#127758;</span>
+                    <h3 class="value-title">Community Rooted</h3>
+                    <p class="value-desc">A portion of every sale goes back into the weaving communities we work with &mdash;
+                        funding apprenticeships, tools, and the preservation of traditional techniques.</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <span class="value-icon">&#127775;</span>
+                    <h3 class="value-title">Modern & Proud</h3>
+                    <p class="value-desc">We believe African fashion belongs everywhere &mdash; on the street, at the office,
+                        at the ceremony. Our designs honour tradition while fitting into contemporary life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- Mission split -- -->
+    <section class="story-section alt">
+        <div class="story-container">
+            <div class="story-split animate-on-scroll">
+                <div>
+                    <span class="story-eyebrow">Our Mission</span>
+                    <h2 class="story-heading">Fashion as a Living Expression of Identity</h2>
+                    <p class="story-body">Whether you are dressing for a ceremony, a celebration, or everyday elegance &mdash;
+                        My African Wear offers authentic styles for men and women that make you feel connected to
+                        something
+                        greater than fashion.</p>
+                    <p class="story-body">We believe that when you wear a piece of your culture, you carry forward the
+                        stories of the people who wove it, dyed it, and stitched it. That is not just clothing. That is
+                        heritage.</p>
+                    <a href="products.html" class="story-cta-btn"
+                        style="margin-top:1.5rem;display:inline-flex;background:#D4700A;color:white;text-decoration:none;padding:0.85rem 2rem;border-radius:50px;font-weight:600;font-size:0.9rem;align-items:center;gap:0.5rem;transition:all 0.3s ease">
+                        Shop the Collection
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                </div>
+                <div>
+                    <img src="resources/product-12.jpg" alt="Kente Skirt Set &mdash; heritage worn with pride"
+                        class="story-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- -- CTA -- -->
+    <section class="story-cta-section">
+        <div class="story-container">
+            <h2 class="story-cta-title animate-on-scroll">Ready to Wear Your Heritage?</h2>
+            <p class="story-cta-sub animate-on-scroll">Explore our full collection of authentic African garments for men
+                and women.</p>
+            <a href="products.html" class="story-cta-btn animate-on-scroll">
+                Explore the Collection
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- -- Footer -- -->
+    <footer style="background:#1a1a1a;color:white;padding:2rem 0;text-align:center">
+        <p style="opacity:0.7">&copy; 2024 My African Wear. Celebrating African heritage through fashion.</p>
+    </footer>
+
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('mobileMenuBtn');
+            const hamburger = document.getElementById('hamburgerIcon');
+            const close = document.getElementById('closeIcon');
+            const isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            hamburger.style.display = isOpen ? 'none' : 'block';
+            close.style.display = isOpen ? 'block' : 'none';
+            const desktopArea = document.getElementById('nav-user-area');
+            const mobileArea = document.getElementById('mobile-user-area');
+            if (mobileArea && desktopArea) mobileArea.innerHTML = desktopArea.innerHTML;
+        }
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('animate-in');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+        // Navbar scroll shadow
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(253,248,242,0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(253,248,242,0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+    <!-- Mobile floating cart -->
+    <a href="cart.html" class="float-cart-btn" id="floatCartBtn" aria-label="View cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+        <span class="float-cart-badge" id="floatCartBadge" style="display:none;">0</span>
+    </a>
+</body>
+
+</html>

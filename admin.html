@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - My African Wear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #f4f1ec;
+            color: #2C2C2C;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 240px;
+            background: #2C2C2C;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-logo p {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ccc;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(212, 112, 10, 0.2);
+            color: #D4700A;
+            border-left-color: #D4700A;
+        }
+
+        .nav-item .icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .store-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .store-link:hover {
+            color: #D4700A;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.85rem;
+            background: none;
+            border: none;
+            width: 100%;
+            transition: color 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: #ff6b6b;
+        }
+
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e8e0d8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2C2C2C;
+        }
+
+        .topbar-meta {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-left: 4px solid #D4700A;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2C2C2C;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2C2C2C;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #D4700A;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #B85E08;
+        }
+
+        .btn-secondary {
+            background: #f4f1ec;
+            color: #555;
+            border: 1px solid #e0d8ce;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e0d8;
+        }
+
+        .btn-danger {
+            background: #fff0f0;
+            color: #e53e3e;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .table-wrap {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar:focus {
+            border-color: #D4700A;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9f6f2;
+        }
+
+        th {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e8e0d8;
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid #f0ebe4;
+            font-size: 0.875rem;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fdf9f5;
+        }
+
+        .product-thumb {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-men {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-women {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .price-input {
+            width: 90px;
+            padding: 0.4rem 0.6rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            outline: none;
+            text-align: right;
+        }
+
+        .price-input:focus {
+            border-color: #D4700A;
+        }
+
+        .price-input.changed {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .save-price-btn {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        .save-price-btn:hover {
+            background: #B85E08;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group.full {
+            grid-column: 1/-1;
+        }
+
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: #D4700A;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .image-upload-area {
+            border: 2px dashed #e8e0d8;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fdf9f5;
+        }
+
+        .image-upload-area:hover {
+            border-color: #D4700A;
+            background: #fff5f0;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .sizes-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .size-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .size-checkbox-label:has(input:checked) {
+            border-color: #D4700A;
+            background: #fff5f0;
+            color: #D4700A;
+            font-weight: 600;
+        }
+
+        .size-checkbox-label input {
+            display: none;
+        }
+
+        .features-input-wrap {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .features-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .feature-tag-admin {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f4f1ec;
+            border: 1px solid #e0d8ce;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .feature-tag-admin button {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .feature-tag-admin button:hover {
+            color: #e53e3e;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e8e0d8;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #2C2C2C;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #48bb78;
+        }
+
+        .toast.error {
+            border-left: 4px solid #e53e3e;
+        }
+
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 8000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .confirm-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-card {
+            background: white;
+            border-radius: 14px;
+            padding: 2rem;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        .mobile-topbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #2C2C2C;
+            padding: 0.25rem;
+            min-width: 40px;
+            min-height: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media(max-width:900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 200;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-topbar-toggle {
+                display: flex;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            .content {
+                padding: 1.25rem;
+            }
+        }
+
+        @media(max-width:480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+    <aside class="sidebar" id="adminSidebar">
+        <div class="sidebar-logo">
+            <img src="resources/logo.jpeg" alt="My African Wear" style="height:40px;width:auto;object-fit:contain;">
+            <p>Admin Dashboard</p>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-item active" onclick="showSection('overview')" id="nav-overview"><span
+                    class="icon">&#128202;</span> Overview</div>
+            <div class="nav-item" onclick="showSection('products')" id="nav-products"><span
+                    class="icon">&#128247;</span> Products</div>
+            <div class="nav-item" onclick="showSection('add-product')" id="nav-add-product"><span
+                    class="icon">&#10133;</span> Add Product</div>
+            <div class="nav-item" onclick="showSection('settings')" id="nav-settings"><span
+                    class="icon">&#9881;&#65039;</span> Settings</div>
+            <div class="nav-item" onclick="showSection('classes')" id="nav-classes"><span class="icon">&#129525;</span>
+                Classes</div>
+            <div class="nav-item" onclick="showSection('promo')" id="nav-promo"><span class="icon">&#127915;</span>
+                Promo Codes</div>
+            <div class="nav-item" onclick="showSection('orders')" id="nav-orders"><span class="icon">&#128230;</span>
+                Orders</div>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="store-link"><span>&#127978;</span> View Store</a>
+            <button class="logout-btn" onclick="handleLogout()"><span>&#128682;</span> Sign Out</button>
+        </div>
+    </aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-topbar-toggle" onclick="toggleMobileSidebar()" aria-label="Toggle sidebar">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <h2 id="topbarTitle">Overview</h2>
+            </div>
+            <span class="topbar-meta" id="topbarMeta">Welcome back, Admin</span>
+        </div>
+        <div class="content">
+            <!-- Overview -->
+            <div class="section active" id="section-overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color:#3b82f6">
+                        <div class="stat-value" id="stat-men">0</div>
+                        <div class="stat-label">Men's Items</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color:#ec4899">
+                        <div class="stat-value" id="stat-women">0</div>
+                        <div class="stat-label">Women's Items</div>
+                    </div>
+                    <div class="stat-card" style="border-left-color:#10b981">
+                        <div class="stat-value" id="stat-avg">GH&#8373;0</div>
+                        <div class="stat-label">Avg. Price</div>
+                    </div>
+                </div>
+                <div class="table-wrap" style="padding:1.5rem">
+                    <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Recent Products</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Color</th>
+                                <th>Gender</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overviewBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Products -->
+            <div class="section" id="section-products">
+                <div class="section-header">
+                    <span class="section-title">All Products</span>
+                    <button class="btn btn-primary" onclick="showSection('add-product')">+ Add New Product</button>
+                </div>
+                <input type="text" class="search-bar" placeholder="Search products..." id="productSearch"
+                    oninput="filterProductTable()">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Color</th>
+                                <th>Gender</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Add Product -->
+            <div class="section" id="section-add-product">
+                <div class="section-header">
+                    <span class="section-title" id="formSectionTitle">Add New Product</span>
+                    <button class="btn btn-secondary" onclick="resetForm();showSection('products')">&#8592; Back to
+                        Products</button>
+                </div>
+                <div class="form-card">
+                    <form id="productForm" onsubmit="handleProductSubmit(event);return false;">
+                        <input type="hidden" id="editProductId">
+                        <div class="form-grid">
+                            <div class="form-group"><label class="form-label">Product Name *</label><input
+                                    class="form-input" type="text" id="pName" placeholder="e.g. Kente Agbada" required>
+                            </div>
+                            <div class="form-group"><label class="form-label">Color *</label><input class="form-input"
+                                    type="text" id="pColor" placeholder="e.g. Royal Gold" required></div>
+                            <div class="form-group"><label class="form-label">Price (GHS) *</label><input
+                                    class="form-input" type="number" id="pPrice" placeholder="185" min="1" step="0.01"
+                                    required></div>
+                            <div class="form-group"><label class="form-label">Category *</label>
+                                <input class="form-input" type="text" id="pCategory" list="categoryList"
+                                    placeholder="Select or type" autocomplete="off" required>
+                                <datalist id="categoryList">
+                                    <option value="Agbada">
+                                    <option value="Kaftan">
+                                    <option value="Senator">
+                                    <option value="Boubou">
+                                    <option value="Aso-Oke">
+                                    <option value="Dress">
+                                    <option value="Skirt Set">
+                                    <option value="Jumpsuit">
+                                    <option value="Wrapper Set">
+                                    <option value="Bubu">
+                                    <option value="Other">
+                                </datalist>
+                            </div>
+                            <div class="form-group"><label class="form-label">Gender *</label>
+                                <select class="form-select" id="pGender" required>
+                                    <option value="">Select gender</option>
+                                    <option>Men</option>
+                                    <option>Women</option>
+                                    <option>Unisex</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label class="form-label">Sizes *</label>
+                                <div class="sizes-checkboxes" id="sizesCheckboxes">
+                                    <label class="size-checkbox-label"><input type="checkbox" value="XS">XS</label>
+                                    <label class="size-checkbox-label"><input type="checkbox" value="S">S</label>
+                                    <label class="size-checkbox-label"><input type="checkbox" value="M">M</label>
+                                    <label class="size-checkbox-label"><input type="checkbox" value="L">L</label>
+                                    <label class="size-checkbox-label"><input type="checkbox" value="XL">XL</label>
+                                    <label class="size-checkbox-label"><input type="checkbox" value="XXL">XXL</label>
+                                </div>
+                            </div>
+                            <div class="form-group full"><label class="form-label">Description *</label><textarea
+                                    class="form-textarea" id="pDescription" placeholder="Describe the product..."
+                                    required></textarea></div>
+                            <div class="form-group full"><label class="form-label">Features</label>
+                                <div class="features-input-wrap">
+                                    <input class="form-input" type="text" id="pFeatureInput"
+                                        placeholder="e.g. Hand-woven Kente" style="flex:1"
+                                        onkeydown="handleFeatureKey(event)">
+                                    <button type="button" class="btn btn-secondary"
+                                        onclick="addFeatureTag()">Add</button>
+                                </div>
+                                <div class="features-tags" id="featuresTags"></div>
+                            </div>
+                            <div class="form-group full"><label class="form-label">Product Image</label>
+                                <div class="image-upload-area" id="uploadArea"
+                                    onclick="document.getElementById('pImageFile').click()"
+                                    ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+                                    <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#128444;&#65039;</div>
+                                    <p><strong>Click to upload</strong> or drag and drop</p>
+                                    <p style="margin-top:4px;font-size:0.78rem">PNG, JPG, WEBP up to 5MB</p>
+                                    <input type="file" id="pImageFile" accept="image/*" style="display:none"
+                                        onchange="handleImageSelect(event)">
+                                </div>
+                                <img id="imagePreview" class="image-preview" alt="Preview">
+                                <input type="hidden" id="pImageData"><input type="hidden" id="pImagePath">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Add Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /content -->
+
+        <!-- Settings -->
+        <div class="section" id="section-settings" style="display:none;padding:2rem">
+            <div class="section-header"><span class="section-title">Settings</span></div>
+            <div class="form-card" style="max-width:480px">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem">Change Admin Password</h3>
+                <p style="font-size:0.85rem;color:#888;margin-bottom:1.5rem">Enter your current password, then choose a
+                    new one.</p>
+                <div id="pw-change-alert"
+                    style="display:none;padding:0.75rem 1rem;border-radius:8px;font-size:0.85rem;margin-bottom:1rem">
+                </div>
+                <div class="form-group"><label class="form-label">Current Password</label>
+                    <div style="position:relative"><input class="form-input" type="password" id="pw-current"
+                            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                            style="padding-right:2.8rem">
+                        <button type="button" onclick="toggleSettingsPw('pw-current',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:0.85rem">Show</button>
+                    </div>
+                </div>
+                <div class="form-group"><label class="form-label">New Password</label>
+                    <div style="position:relative"><input class="form-input" type="password" id="pw-new"
+                            placeholder="Min. 8 characters" style="padding-right:2.8rem"
+                            oninput="checkAdminStrength(this.value)">
+                        <button type="button" onclick="toggleSettingsPw('pw-new',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:0.85rem">Show</button>
+                    </div>
+                    <div style="height:4px;border-radius:2px;background:#e8e0d8;margin-top:0.4rem;overflow:hidden">
+                        <div id="admin-strength-fill"
+                            style="height:100%;border-radius:2px;width:0;transition:width 0.3s,background 0.3s"></div>
+                    </div>
+                    <div id="admin-strength-label" style="font-size:0.72rem;color:#aaa;margin-top:3px"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Confirm New Password</label>
+                    <div style="position:relative"><input class="form-input" type="password" id="pw-confirm"
+                            placeholder="Repeat new password" style="padding-right:2.8rem">
+                        <button type="button" onclick="toggleSettingsPw('pw-confirm',this)"
+                            style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:0.85rem">Show</button>
+                    </div>
+                </div>
+                <div style="display:flex;gap:1rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #e8e0d8">
+                    <button class="btn btn-secondary" onclick="clearPwForm()">Clear</button>
+                    <button class="btn btn-primary" onclick="changeAdminPassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classes -->
+        <div class="section" id="section-classes" style="display:none;padding:2rem">
+            <div class="section-header">
+                <span class="section-title">Sewing Class Bookings</span>
+                <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                    <select id="classStatusFilter" onchange="renderBookingsTable()" class="btn btn-secondary"
+                        style="font-weight:500;cursor:pointer;">
+                        <option value="all">All Bookings</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <a href="classes.html" target="_blank" class="btn btn-primary"
+                        style="text-decoration:none;">&#128279; View Booking Page</a>
+                </div>
+            </div>
+            <div class="stats-grid" style="margin-bottom:1.5rem;">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-bookings-total">0</div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#f59e0b">
+                    <div class="stat-value" id="stat-bookings-pending">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#10b981">
+                    <div class="stat-value" id="stat-bookings-confirmed">0</div>
+                    <div class="stat-label">Confirmed</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#e53e3e">
+                    <div class="stat-value" id="stat-bookings-cancelled">0</div>
+                    <div class="stat-label">Cancelled</div>
+                </div>
+            </div>
+            <input type="text" class="search-bar" id="bookingSearch" placeholder="Search by name, email or level..."
+                oninput="renderBookingsTable()">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Level</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody"></tbody>
+                </table>
+            </div>
+            <div class="confirm-overlay" id="bookingDetailOverlay" style="z-index:8500;">
+                <div class="confirm-card" style="max-width:520px;text-align:left;max-height:80vh;overflow-y:auto;">
+                    <h3 style="margin-bottom:1rem;">Booking Details</h3>
+                    <div id="bookingDetailBody"
+                        style="font-size:0.875rem;color:#555;line-height:1.8;margin-bottom:1.5rem;"></div>
+                    <div class="confirm-actions"><button class="btn btn-secondary"
+                            onclick="closeBookingDetail()">Close</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Promo Codes -->
+        <div class="section" id="section-promo" style="display:none;padding:2rem">
+            <div class="section-header">
+                <span class="section-title">Promo Codes &mdash; 10% Discount</span>
+                <div style="display:flex;gap:0.75rem;"><button class="btn btn-secondary"
+                        onclick="generatePromoCodes(5)">&#9889; Generate 5</button><button class="btn btn-primary"
+                        onclick="generatePromoCodes(10)">&#9889; Generate 10</button></div>
+            </div>
+            <div
+                style="background:#fff5f0;border:1px solid #f5c6a0;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:0.85rem;color:#7a3a10;">
+                &#8505;&#65039; Generated codes give customers <strong>10% off</strong> their entire order. Each code
+                can only be used once.</div>
+            <div class="stats-grid" style="margin-bottom:1.5rem;">
+                <div class="stat-card">
+                    <div class="stat-value" id="promo-stat-total">0</div>
+                    <div class="stat-label">Total Codes</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#10b981">
+                    <div class="stat-value" id="promo-stat-active">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#e53e3e">
+                    <div class="stat-value" id="promo-stat-used">0</div>
+                    <div class="stat-label">Used</div>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Discount</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Used By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="promoTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="section" id="section-orders" style="display:none;padding:2rem">
+            <div class="section-header">
+                <span class="section-title">Orders</span>
+                <select id="orderStatusFilter" onchange="renderOrdersTable()" class="btn btn-secondary"
+                    style="font-weight:500;cursor:pointer;">
+                    <option value="all">All Orders</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="stats-grid" style="margin-bottom:1.5rem;">
+                <div class="stat-card">
+                    <div class="stat-value" id="order-stat-total">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#10b981">
+                    <div class="stat-value" id="order-stat-revenue">GH&#8373;0</div>
+                    <div class="stat-label">Revenue</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#3b82f6">
+                    <div class="stat-value" id="order-stat-today">0</div>
+                    <div class="stat-label">Today</div>
+                </div>
+                <div class="stat-card" style="border-left-color:#f59e0b">
+                    <div class="stat-value" id="order-stat-pending">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+            <input type="text" class="search-bar" id="orderSearch" placeholder="Search by customer name or email..."
+                oninput="renderOrdersTable()">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody"></tbody>
+                </table>
+            </div>
+            <div class="confirm-overlay" id="orderDetailOverlay" style="z-index:8500;">
+                <div class="confirm-card" style="max-width:560px;text-align:left;max-height:80vh;overflow-y:auto;">
+                    <h3 style="margin-bottom:1rem;">Order Details</h3>
+                    <div id="orderDetailBody" style="font-size:0.875rem;color:#555;margin-bottom:1.5rem;"></div>
+                    <div class="confirm-actions"><button class="btn btn-secondary"
+                            onclick="closeOrderDetail()">Close</button></div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /main -->
+
+    <div class="toast" id="toast"></div>
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-card">
+            <h3>Delete Product?</h3>
+            <p style="color:#666;font-size:0.9rem;margin:0.5rem 0 1.5rem">This will permanently remove the product. This
+                cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script>
+        // ── Constants ──────────────────────────────────────────────────────────────
+        const ADMIN_USER = 'admin';
+        const ADMIN_PASS = 'myafricanwear2024Admin@mfw2026';
+        let currentAdminPass = ADMIN_PASS;
+        let _products = [];
+        let _bookings = [];
+        let _orders = [];
+        let toastTimer;
+
+        // ── Mobile Sidebar ─────────────────────────────────────────────────────────
+        function toggleMobileSidebar() {
+            const s = document.getElementById('adminSidebar'), o = document.getElementById('sidebarOverlay');
+            const open = s.classList.toggle('mobile-open');
+            o.classList.toggle('show', open);
+        }
+        function closeMobileSidebar() {
+            document.getElementById('adminSidebar').classList.remove('mobile-open');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+
+        // ── Auth ───────────────────────────────────────────────────────────────────
+        function handleLogout() { sessionStorage.removeItem('afriAdminAuth'); window.location.href = 'admin-login.html'; }
+
+        // ── showSection ────────────────────────────────────────────────────────────
+        const sectionTitles = { overview: 'Overview', products: 'Products', 'add-product': 'Add Product', settings: 'Settings', classes: 'Classes', promo: 'Promo Codes', orders: 'Orders' };
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            ['section-settings', 'section-classes', 'section-promo', 'section-orders'].forEach(function (sid) {
+                var el = document.getElementById(sid); if (el) el.style.display = 'none';
+            });
+            if (id === 'settings') { document.getElementById('section-settings').style.display = 'block'; }
+            else if (id === 'classes') { document.getElementById('section-classes').style.display = 'block'; loadAndRenderBookings(); }
+            else if (id === 'promo') { document.getElementById('section-promo').style.display = 'block'; renderPromoTable(); }
+            else if (id === 'orders') { document.getElementById('section-orders').style.display = 'block'; loadAndRenderOrders(); }
+            else { var el = document.getElementById('section-' + id); if (el) el.classList.add('active'); }
+            var navEl = document.getElementById('nav-' + id); if (navEl) navEl.classList.add('active');
+            document.getElementById('topbarTitle').textContent = sectionTitles[id] || id;
+            if (id === 'products') renderProductsTable();
+            if (id === 'overview') renderOverview();
+            if (id === 'add-product') {
+                var isEdit = !!document.getElementById('editProductId').value;
+                document.getElementById('formSectionTitle').textContent = isEdit ? 'Edit Product' : 'Add New Product';
+                document.getElementById('submitBtn').textContent = isEdit ? 'Save Changes' : 'Add Product';
+            }
+            if (window.innerWidth <= 900) closeMobileSidebar();
+        }
+
+        // ── Overview ───────────────────────────────────────────────────────────────
+        function renderOverview() {
+            const p = _products;
+            document.getElementById('stat-total').textContent = p.length;
+            document.getElementById('stat-men').textContent = p.filter(x => x.gender === 'Men').length;
+            document.getElementById('stat-women').textContent = p.filter(x => x.gender === 'Women').length;
+            const avg = p.length ? (p.reduce((s, x) => s + x.price, 0) / p.length).toFixed(0) : 0;
+            document.getElementById('stat-avg').textContent = 'GH\u20B5' + avg;
+            document.getElementById('overviewBody').innerHTML = p.slice(0, 6).map(x => `
+            <tr><td><img src="${x.image}" class="product-thumb" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><rect width=%2248%22 height=%2248%22 fill=%22%23f4f1ec%22/><text x=%2224%22 y=%2230%22 text-anchor=%22middle%22 font-size=%2218%22>&#128247;</text></svg>'"></td>
+            <td><strong>${x.name}</strong></td><td>${x.color}</td>
+            <td><span class="badge badge-${x.gender.toLowerCase()}">${x.gender}</span></td>
+            <td><strong>GH\u20B5${x.price}</strong></td><td>${x.category}</td></tr>`).join('');
+        }
+
+        // ── Products Table ─────────────────────────────────────────────────────────
+        function renderProductsTable(filter = '') {
+            const q = filter.toLowerCase();
+            const filtered = q ? _products.filter(p => p.name.toLowerCase().includes(q) || p.color.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)) : _products;
+            document.getElementById('productsTableBody').innerHTML = filtered.map(p => `
+            <tr id="row-${p.id}">
+                <td><img src="${p.image}" class="product-thumb" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><rect width=%2248%22 height=%2248%22 fill=%22%23f4f1ec%22/><text x=%2224%22 y=%2230%22 text-anchor=%22middle%22 font-size=%2218%22>&#128247;</text></svg>'"></td>
+                <td><strong>${p.name}</strong></td><td>${p.color}</td>
+                <td><span class="badge badge-${p.gender.toLowerCase()}">${p.gender}</span></td>
+                <td>${p.category}</td>
+                <td><div style="display:flex;align-items:center;gap:0.5rem">
+                    <span style="color:#888;font-size:0.85rem">GH\u20B5</span>
+                    <input class="price-input" type="number" value="${p.price}" min="1" step="0.01" id="price-${p.id}" oninput="markPriceChanged(${p.id})">
+                    <button class="save-price-btn" id="saveprice-${p.id}" onclick="savePrice(${p.id})" style="display:none">Save</button>
+                </div></td>
+                <td><div style="display:flex;gap:0.4rem">
+                    <button class="btn btn-secondary btn-sm" onclick="editProduct(${p.id})">&#9998; Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(${p.id})">&#128465; Delete</button>
+                </div></td>
+            </tr>`).join('');
+        }
+        function filterProductTable() { renderProductsTable(document.getElementById('productSearch').value); }
+        function markPriceChanged(id) { document.getElementById('price-' + id).classList.add('changed'); document.getElementById('saveprice-' + id).style.display = 'inline-block'; }
+        async function savePrice(id) {
+            const val = parseFloat(document.getElementById('price-' + id).value);
+            if (isNaN(val) || val <= 0) { showToast('Enter a valid price', 'error'); return; }
+            const p = _products.find(x => x.id === id);
+            if (p) { p.price = val; await MAWdb.products.update(p); document.getElementById('price-' + id).classList.remove('changed'); document.getElementById('saveprice-' + id).style.display = 'none'; showToast('Price updated', 'success'); }
+        }
+
+        // ── Delete ─────────────────────────────────────────────────────────────────
+        let pendingDeleteId = null;
+        function confirmDelete(id) { pendingDeleteId = id; document.getElementById('confirmOverlay').classList.add('show'); }
+        function closeConfirm() { pendingDeleteId = null; document.getElementById('confirmOverlay').classList.remove('show'); }
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (pendingDeleteId === null) return;
+            await MAWdb.products.delete(pendingDeleteId);
+            _products = _products.filter(p => p.id !== pendingDeleteId);
+            closeConfirm(); renderProductsTable(document.getElementById('productSearch').value); renderOverview();
+            showToast('Product deleted', 'success'); pendingDeleteId = null;
+        });
+
+        // ── Edit Product ───────────────────────────────────────────────────────────
+        function editProduct(id) {
+            const p = _products.find(x => x.id === id); if (!p) return;
+            document.getElementById('editProductId').value = p.id;
+            document.getElementById('pName').value = p.name;
+            document.getElementById('pColor').value = p.color;
+            document.getElementById('pPrice').value = p.price;
+            document.getElementById('pCategory').value = p.category;
+            document.getElementById('pGender').value = p.gender;
+            document.getElementById('pDescription').value = p.description || '';
+            document.querySelectorAll('#sizesCheckboxes input').forEach(cb => { cb.checked = (p.sizes || []).includes(cb.value); });
+            currentFeatures = [...(p.features || [])]; renderFeatureTags();
+            const prev = document.getElementById('imagePreview');
+            if (p.imageData || p.image) { prev.src = p.imageData || p.image; prev.style.display = 'block'; }
+            showSection('add-product');
+        }
+
+        // ── Add/Edit Form ──────────────────────────────────────────────────────────
+        let currentFeatures = [];
+        function handleFeatureKey(e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addFeatureTag(); } }
+        function addFeatureTag() {
+            const input = document.getElementById('pFeatureInput');
+            const val = input.value.trim().replace(/,$/, '');
+            if (val && !currentFeatures.includes(val)) { currentFeatures.push(val); renderFeatureTags(); }
+            input.value = '';
+        }
+        function removeFeatureTag(i) { currentFeatures.splice(i, 1); renderFeatureTags(); }
+        function renderFeatureTags() {
+            document.getElementById('featuresTags').innerHTML = currentFeatures.map((f, i) =>
+                `<span class="feature-tag-admin">${f}<button type="button" onclick="removeFeatureTag(${i})">&times;</button></span>`).join('');
+        }
+        function handleImageSelect(e) {
+            const file = e.target.files[0]; if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5MB', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = ev => { document.getElementById('pImageData').value = ev.target.result; const p = document.getElementById('imagePreview'); p.src = ev.target.result; p.style.display = 'block'; };
+            reader.readAsDataURL(file);
+        }
+        function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').style.borderColor = '#D4700A'; }
+        function handleDrop(e) {
+            e.preventDefault(); document.getElementById('uploadArea').style.borderColor = '';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) { const dt = new DataTransfer(); dt.items.add(file); document.getElementById('pImageFile').files = dt.files; handleImageSelect({ target: { files: [file] } }); }
+        }
+        async function handleProductSubmit(e) {
+            e.preventDefault();
+            const sizes = Array.from(document.querySelectorAll('#sizesCheckboxes input:checked')).map(cb => cb.value);
+            if (!sizes.length) { showToast('Select at least one size', 'error'); return; }
+            const imageData = document.getElementById('pImageData').value;
+            const imagePath = document.getElementById('pImagePath').value;
+            const editId = document.getElementById('editProductId').value;
+            const productData = {
+                name: document.getElementById('pName').value.trim(),
+                color: document.getElementById('pColor').value.trim(),
+                price: parseFloat(document.getElementById('pPrice').value),
+                category: document.getElementById('pCategory').value,
+                gender: document.getElementById('pGender').value,
+                sizes, description: document.getElementById('pDescription').value.trim(),
+                features: [...currentFeatures],
+                image: imageData || imagePath || 'resources/product-1.jpg',
+                ...(imageData ? { imageData } : {})
+            };
+            if (editId) {
+                productData.id = parseInt(editId);
+                await MAWdb.products.update(productData);
+                const idx = _products.findIndex(p => p.id === productData.id);
+                if (idx !== -1) _products[idx] = productData;
+                showToast('Product updated', 'success');
+            } else {
+                const added = await MAWdb.products.add(productData);
+                if (added) _products.push(added);
+                showToast('Product added! Now live in the store.', 'success');
+            }
+            resetForm(); renderOverview(); showSection('products');
+        }
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            ['editProductId', 'pImageData', 'pImagePath'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            const prev = document.getElementById('imagePreview'); prev.src = ''; prev.style.display = 'none';
+            currentFeatures = []; renderFeatureTags();
+            document.querySelectorAll('#sizesCheckboxes input').forEach(cb => cb.checked = false);
+            const btn = document.getElementById('submitBtn'); if (btn) { btn.disabled = false; btn.textContent = 'Add Product'; }
+            const fi = document.getElementById('pImageFile');
+            if (fi) { const ni = fi.cloneNode(true); ni.addEventListener('change', handleImageSelect); fi.parentNode.replaceChild(ni, fi); }
+        }
+
+        // ── Settings ───────────────────────────────────────────────────────────────
+        function toggleSettingsPw(id, btn) { const el = document.getElementById(id); if (el.type === 'password') { el.type = 'text'; btn.textContent = 'Hide'; } else { el.type = 'password'; btn.textContent = 'Show'; } }
+        function checkAdminStrength(val) {
+            let score = 0; if (val.length >= 8) score++; if (/[A-Z]/.test(val)) score++; if (/[0-9]/.test(val)) score++; if (/[^A-Za-z0-9]/.test(val)) score++;
+            const levels = [{ w: '0%', bg: '#e8e0d8', t: '' }, { w: '25%', bg: '#e53e3e', t: 'Weak' }, { w: '50%', bg: '#f59e0b', t: 'Fair' }, { w: '75%', bg: '#3b82f6', t: 'Good' }, { w: '100%', bg: '#48bb78', t: 'Strong' }];
+            const l = levels[score]; const f = document.getElementById('admin-strength-fill'); const lb = document.getElementById('admin-strength-label');
+            f.style.width = l.w; f.style.background = l.bg; lb.textContent = l.t; lb.style.color = l.bg;
+        }
+        function setPwAlert(msg, type) { const el = document.getElementById('pw-change-alert'); el.textContent = msg; el.style.display = 'block'; el.style.background = type === 'success' ? '#f0fff4' : '#fff5f5'; el.style.color = type === 'success' ? '#276749' : '#e53e3e'; el.style.border = type === 'success' ? '1px solid #9ae6b4' : '1px solid #fecaca'; }
+        function clearPwForm() {
+            ['pw-current', 'pw-new', 'pw-confirm'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ''; el.type = 'password'; } });
+            document.querySelectorAll('#section-settings button[onclick*="toggleSettingsPw"]').forEach(b => b.textContent = 'Show');
+            const f = document.getElementById('admin-strength-fill'); if (f) f.style.width = '0';
+            const l = document.getElementById('admin-strength-label'); if (l) l.textContent = '';
+            const a = document.getElementById('pw-change-alert'); if (a) a.style.display = 'none';
+        }
+        async function changeAdminPassword() {
+            const current = document.getElementById('pw-current').value, newPw = document.getElementById('pw-new').value, confirm = document.getElementById('pw-confirm').value;
+            if (!current) { setPwAlert('Enter your current password.', 'error'); return; }
+            if (newPw.length < 8) { setPwAlert('New password must be at least 8 characters.', 'error'); return; }
+            if (newPw !== confirm) { setPwAlert('New passwords do not match.', 'error'); return; }
+            let truePass; try { truePass = (await MAWdb.settings.get('adminPass')) || ADMIN_PASS; } catch (_) { truePass = currentAdminPass || ADMIN_PASS; }
+            if (current !== truePass) { setPwAlert('Current password is incorrect.', 'error'); return; }
+            if (newPw === truePass) { setPwAlert('New password must differ from current.', 'error'); return; }
+            try { await MAWdb.settings.set('adminPass', newPw); currentAdminPass = newPw; setPwAlert('Password updated successfully!', 'success'); clearPwForm(); showToast('Password changed', 'success'); }
+            catch (err) { setPwAlert('Failed to save. Please try again.', 'error'); }
+        }
+    </script>
+    <script>
+        // ── Bookings ───────────────────────────────────────────────────────────────
+        async function loadAndRenderBookings() {
+            try { _bookings = await MAWdb.bookings.getAll(); } catch (e) { _bookings = []; }
+            renderBookingsStats(); renderBookingsTable();
+        }
+        function renderBookingsStats() {
+            document.getElementById('stat-bookings-total').textContent = _bookings.length;
+            document.getElementById('stat-bookings-pending').textContent = _bookings.filter(b => b.status === 'pending').length;
+            document.getElementById('stat-bookings-confirmed').textContent = _bookings.filter(b => b.status === 'confirmed').length;
+            document.getElementById('stat-bookings-cancelled').textContent = _bookings.filter(b => b.status === 'cancelled').length;
+        }
+        function renderBookingsTable() {
+            const filter = document.getElementById('classStatusFilter').value;
+            const q = (document.getElementById('bookingSearch').value || '').toLowerCase();
+            let list = _bookings;
+            if (filter !== 'all') list = list.filter(b => b.status === filter);
+            if (q) list = list.filter(b => (b.first_name + ' ' + b.last_name).toLowerCase().includes(q) || (b.email || '').toLowerCase().includes(q) || (b.level || '').toLowerCase().includes(q));
+            const sc = { pending: '#f59e0b', confirmed: '#10b981', cancelled: '#e53e3e' };
+            const tbody = document.getElementById('bookingsTableBody');
+            if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#aaa;">No bookings found.</td></tr>'; return; }
+            tbody.innerHTML = list.map(b => {
+                const col = sc[b.status] || '#888';
+                const dt = b.preferred_date ? new Date(b.preferred_date + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+                return `<tr><td><strong>${b.first_name || ''} ${b.last_name || ''}</strong></td><td style="font-size:0.82rem">${b.email || '-'}</td><td style="font-size:0.82rem">${b.phone || '-'}</td>
+                <td><span class="badge" style="background:#F7EFE0;color:#D4700A;">${b.level || '-'}</span></td>
+                <td style="font-size:0.82rem">${dt}</td><td style="font-size:0.82rem">${b.preferred_time || '-'}</td>
+                <td><span class="badge" style="background:${col}22;color:${col};">${b.status || 'pending'}</span></td>
+                <td><div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+                    <button class="btn btn-secondary btn-sm" onclick="viewBookingDetail(${b.id})">View</button>
+                    ${b.status === 'pending' ? `<button class="btn btn-primary btn-sm" onclick="updateBookingStatus(${b.id},'confirmed')">&#10003; Confirm</button>` : ''}
+                    ${b.status !== 'cancelled' ? `<button class="btn btn-danger btn-sm" onclick="updateBookingStatus(${b.id},'cancelled')">&#10005; Cancel</button>` : ''}
+                </div></td></tr>`;
+            }).join('');
+        }
+        function formatBookingDate(d) { try { return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); } catch (_) { return d; } }
+        async function updateBookingStatus(id, status) {
+            const b = _bookings.find(x => x.id === id); if (!b) return;
+            b.status = status; await MAWdb.bookings.update(b); renderBookingsStats(); renderBookingsTable(); showToast('Booking ' + status, 'success');
+        }
+        async function deleteBooking(id) {
+            if (!confirm('Delete this booking?')) return;
+            await MAWdb.bookings.delete(id); _bookings = _bookings.filter(b => b.id !== id); renderBookingsStats(); renderBookingsTable(); showToast('Booking deleted', 'success');
+        }
+        function viewBookingDetail(id) {
+            const b = _bookings.find(x => x.id === id); if (!b) return;
+            document.getElementById('bookingDetailBody').innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+            <tr><td style="padding:0.3rem 0;color:#888;width:40%">Name</td><td>${b.first_name || ''} ${b.last_name || ''}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Email</td><td>${b.email || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Phone</td><td>${b.phone || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Level</td><td>${b.level || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Date</td><td>${b.preferred_date ? formatBookingDate(b.preferred_date + 'T00:00:00') : '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Time</td><td>${b.preferred_time || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Experience</td><td>${b.experience || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Status</td><td><strong>${b.status || 'pending'}</strong></td></tr>
+            ${b.message ? `<tr><td style="padding:0.3rem 0;color:#888;vertical-align:top">Message</td><td style="font-style:italic">"${b.message}"</td></tr>` : ''}
+        </table>`;
+            document.getElementById('bookingDetailOverlay').classList.add('show');
+        }
+        function closeBookingDetail() { document.getElementById('bookingDetailOverlay').classList.remove('show'); }
+
+        // ── Promo Codes ────────────────────────────────────────────────────────────
+        function generatePromoCode() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let code = 'MAW-'; for (let i = 0; i < 8; i++)code += c[Math.floor(Math.random() * c.length)]; return code; }
+        async function generatePromoCodes(count) {
+            await MAWdb.init();
+            const existing = await MAWdb.promoCodes.getAll(); const existingCodes = new Set(existing.map(c => c.code));
+            let added = 0;
+            for (let i = 0; i < count * 3 && added < count; i++) { const code = generatePromoCode(); if (!existingCodes.has(code)) { await MAWdb.promoCodes.add({ code, discount: 0.10, active: true, usedBy: null, usedAt: null, createdAt: new Date().toISOString() }); existingCodes.add(code); added++; } }
+            await renderPromoTable(); showToast(added + ' promo code' + (added !== 1 ? 's' : '') + ' generated', 'success');
+        }
+        async function renderPromoTable() {
+            await MAWdb.init(); const codes = await MAWdb.promoCodes.getAll();
+            document.getElementById('promo-stat-total').textContent = codes.length;
+            document.getElementById('promo-stat-active').textContent = codes.filter(c => c.active && !c.usedBy).length;
+            document.getElementById('promo-stat-used').textContent = codes.filter(c => c.usedBy).length;
+            const tbody = document.getElementById('promoTableBody');
+            if (!codes.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#aaa;">No codes yet. Click Generate.</td></tr>'; return; }
+            tbody.innerHTML = codes.map(c => {
+                const badge = c.usedBy ? '<span class="badge" style="background:#fff0f0;color:#e53e3e;">Used</span>' : c.active ? '<span class="badge" style="background:#f0fff4;color:#276749;">Active</span>' : '<span class="badge" style="background:#f4f1ec;color:#888;">Disabled</span>';
+                const dt = c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+                return `<tr><td><code style="background:#f4f1ec;padding:0.2rem 0.6rem;border-radius:5px;font-size:0.85rem;font-weight:700;letter-spacing:1px">${c.code}</code>
+                <button onclick="copyPromoCode('${c.code}')" style="background:none;border:none;cursor:pointer;color:#D4700A;font-size:0.75rem;margin-left:0.4rem" title="Copy">&#128203;</button></td>
+                <td><strong style="color:#D4700A">10% OFF</strong></td><td>${badge}</td>
+                <td style="font-size:0.82rem;color:#888">${dt}</td>
+                <td>${c.usedBy ? `<span style="font-size:0.78rem;color:#666">${c.usedBy}</span>` : '-'}</td>
+                <td><div style="display:flex;gap:0.4rem">
+                    ${!c.usedBy && c.active ? `<button class="btn btn-secondary btn-sm" onclick="togglePromoCode('${c.code}',false)">Disable</button>` : ''}
+                    ${!c.usedBy && !c.active ? `<button class="btn btn-primary btn-sm" onclick="togglePromoCode('${c.code}',true)">Enable</button>` : ''}
+                    <button class="btn btn-danger btn-sm" onclick="deletePromoCode('${c.code}')">&#128465;</button>
+                </div></td></tr>`;
+            }).join('');
+        }
+        function copyPromoCode(code) { navigator.clipboard.writeText(code).then(() => showToast('Copied: ' + code, 'success')); }
+        async function togglePromoCode(code, active) { const p = await MAWdb.promoCodes.getByCode(code); if (!p) return; p.active = active; await MAWdb.promoCodes.update(p); await renderPromoTable(); showToast('Code ' + (active ? 'enabled' : 'disabled'), 'success'); }
+        async function deletePromoCode(code) { if (!confirm('Delete ' + code + '?')) return; await MAWdb.promoCodes.delete(code); await renderPromoTable(); showToast('Code deleted', 'success'); }
+
+        // ── Orders ─────────────────────────────────────────────────────────────────
+        async function loadAndRenderOrders() {
+            try { _orders = await MAWdb.orders.getAll(); } catch (e) { _orders = []; }
+            renderOrdersStats(); renderOrdersTable();
+        }
+        function renderOrdersStats() {
+            const today = new Date().toISOString().slice(0, 10);
+            document.getElementById('order-stat-total').textContent = _orders.length;
+            document.getElementById('order-stat-revenue').textContent = 'GH\u20B5' + _orders.reduce((s, o) => s + parseFloat(o.total || 0), 0).toFixed(2);
+            document.getElementById('order-stat-today').textContent = _orders.filter(o => (o.created_at || '').startsWith(today)).length;
+            document.getElementById('order-stat-pending').textContent = _orders.filter(o => o.status === 'pending').length;
+        }
+        function renderOrdersTable() {
+            const filter = document.getElementById('orderStatusFilter').value;
+            const q = (document.getElementById('orderSearch').value || '').toLowerCase();
+            let list = [..._orders];
+            if (filter !== 'all') list = list.filter(o => o.status === filter);
+            if (q) list = list.filter(o => (o.user_name || '').toLowerCase().includes(q) || (o.user_email || '').toLowerCase().includes(q));
+            const sc = { confirmed: '#10b981', pending: '#f59e0b', shipped: '#3b82f6', delivered: '#276749', cancelled: '#e53e3e' };
+            const tbody = document.getElementById('ordersTableBody');
+            if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#aaa;">No orders yet.</td></tr>'; return; }
+            tbody.innerHTML = list.map(o => {
+                const items = Array.isArray(o.items) ? o.items : [];
+                const sum = items.slice(0, 2).map(i => i.name).join(', ') + (items.length > 2 ? ' +' + (items.length - 2) + ' more' : '');
+                const dt = o.created_at ? new Date(o.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+                const col = sc[o.status] || '#888';
+                const opts = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(s => `<option value="${s}"${o.status === s ? ' selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('');
+                return `<tr><td style="font-size:0.78rem;color:#888">#${String(o.id).slice(-6)}</td>
+                <td><strong>${o.user_name || 'Guest'}</strong><br><span style="font-size:0.75rem;color:#888">${o.user_email || ''}</span></td>
+                <td style="font-size:0.82rem">${sum}</td>
+                <td><strong>GH\u20B5${parseFloat(o.total || 0).toFixed(2)}</strong></td>
+                <td style="font-size:0.82rem">${o.payment_method || '-'}</td>
+                <td><span class="badge" style="background:${col}22;color:${col}">${o.status || 'pending'}</span></td>
+                <td style="font-size:0.78rem;color:#888">${dt}</td>
+                <td><div style="display:flex;gap:0.4rem">
+                    <button class="btn btn-secondary btn-sm" onclick="viewOrderDetail(${o.id})">View</button>
+                    <select class="btn btn-secondary btn-sm" onchange="updateOrderStatus(${o.id},this.value)" style="cursor:pointer">${opts}</select>
+                </div></td></tr>`;
+            }).join('');
+        }
+        async function updateOrderStatus(id, status) {
+            try { await MAWdb.orders.updateStatus(id, status); const o = _orders.find(x => x.id === id); if (o) o.status = status; renderOrdersStats(); renderOrdersTable(); showToast('Order updated to ' + status, 'success'); }
+            catch (e) { showToast('Failed to update order', 'error'); }
+        }
+        function viewOrderDetail(id) {
+            const o = _orders.find(x => x.id === id); if (!o) return;
+            const items = Array.isArray(o.items) ? o.items : [];
+            const d = o.delivery_address || {};
+            document.getElementById('orderDetailBody').innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+            <tr><td style="padding:0.3rem 0;color:#888;width:35%">Customer</td><td>${o.user_name || 'Guest'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Email</td><td>${o.user_email || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Payment</td><td>${o.payment_method || '-'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Promo</td><td>${o.promo_code || 'None'}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Total</td><td style="font-weight:700;color:#D4700A">GH\u20B5${parseFloat(o.total || 0).toFixed(2)}</td></tr>
+            <tr><td style="padding:0.3rem 0;color:#888">Delivery</td><td>${[d.address, d.city, d.state].filter(Boolean).join(', ') || '-'}</td></tr>
+        </table>
+        <div style="margin-top:1rem;font-weight:600;font-size:0.82rem;color:#555">Items (${items.length})</div>
+        <div style="font-size:0.85rem;color:#666;line-height:1.8">${items.map(i => i.name + ' x' + i.quantity + ' - GH\u20B5' + i.price).join('<br>')}</div>`;
+            document.getElementById('orderDetailOverlay').classList.add('show');
+        }
+        function closeOrderDetail() { document.getElementById('orderDetailOverlay').classList.remove('show'); }
+
+        // ── Toast ──────────────────────────────────────────────────────────────────
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.textContent = (type === 'success' ? '&#10003; ' : '\u274C ') + msg;
+            t.className = 'toast ' + type + ' show';
+            clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ── Init ───────────────────────────────────────────────────────────────────
+        async function initDashboard() {
+            await MAWdb.init();
+            try { _products = await MAWdb.products.getAll(); } catch (e) { _products = []; }
+            try { const stored = await MAWdb.settings.get('adminPass'); if (stored) currentAdminPass = stored; } catch (e) { }
+            renderOverview();
+            renderProductsTable();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('afriAdminAuth') === '1') {
+                initDashboard();
+            } else {
+                window.location.href = 'admin-login.html';
+            }
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => { if (window.innerWidth <= 900) closeMobileSidebar(); });
+            });
+        });
+    </script>
+</body>
+
+</html>

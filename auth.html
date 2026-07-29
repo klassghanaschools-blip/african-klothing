@@ -1,0 +1,978 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up - My African Wear</title>
+    <meta name="description"
+        content="Sign in or create your My African Wear account to enjoy fast nationwide delivery.">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(44, 44, 44, 0.92) 0%, rgba(74, 55, 40, 0.88) 60%, rgba(212, 112, 10, 0.85) 100%),
+                url('resources/hero-urban.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Logo bar */
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo a {
+            text-decoration: none;
+        }
+
+        .auth-logo h1 {
+            font-family: 'Canela', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .auth-logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Card */
+        .auth-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .auth-tab {
+            padding: 1.1rem;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #f4f1ec;
+            color: #888;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #D4700A;
+            border-bottom: 3px solid #D4700A;
+        }
+
+        .auth-tab:first-child {
+            border-radius: 24px 0 0 0;
+        }
+
+        .auth-tab:last-child {
+            border-radius: 0 24px 0 0;
+        }
+
+        /* Forms */
+        .auth-body {
+            padding: 2rem;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-title {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            color: #2C2C2C;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-subtitle {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 1.75rem;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .field-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .field-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .field-input,
+        .field-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            width: 100%;
+            background: white;
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            border-color: #D4700A;
+        }
+
+        .field-input.error,
+        .field-select.error {
+            border-color: #e53e3e;
+            background: #fff5f5;
+        }
+
+        .field-error {
+            font-size: 0.75rem;
+            color: #e53e3e;
+            display: none;
+        }
+
+        .field-error.show {
+            display: block;
+        }
+
+        /* Password toggle */
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap .field-input {
+            padding-right: 2.8rem;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .toggle-pw:hover {
+            color: #D4700A;
+        }
+
+        /* Section divider */
+        .section-divider {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.25rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f0ebe4;
+        }
+
+        /* Submit */
+        .auth-submit {
+            width: 100%;
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
+        }
+
+        .auth-submit:hover {
+            background: #B85E08;
+        }
+
+        .auth-submit:active {
+            transform: scale(0.98);
+        }
+
+        .auth-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+        }
+
+        /* Alert */
+        .auth-alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .auth-alert.error {
+            background: #fff5f5;
+            color: #e53e3e;
+            border: 1px solid #fecaca;
+            display: block;
+        }
+
+        .auth-alert.success {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+            display: block;
+        }
+
+        /* Switch link */
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .auth-switch a {
+            color: #D4700A;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to store */
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link a:hover {
+            color: white;
+        }
+
+        /* Strength meter */
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: #e8e0d8;
+            margin-top: 0.4rem;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 2px;
+            width: 0;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .strength-label {
+            font-size: 0.72rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #D4700A;
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 0.82rem;
+            color: #666;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .checkbox-group label a {
+            color: #D4700A;
+        }
+
+        @media (max-width: 480px) {
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-wrapper">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <a href="index.html">
+                <img src="resources/logo.jpeg" alt="My African Wear"
+                    style="height:60px;width:auto;object-fit:contain;margin:0 auto;display:block;">
+                <p>Authentic African Fashion</p>
+            </a>
+        </div>
+
+        <!-- Card -->
+        <div class="auth-card">
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+            </div>
+
+            <div class="auth-body">
+
+                <!-- -- SIGN IN FORM -- -->
+                <form class="auth-form active" id="form-signin" onsubmit="handleSignIn(event); return false;"
+                    novalidate>
+                    <h2 class="form-title">Welcome back</h2>
+                    <p class="form-subtitle">Sign in to track orders and manage your delivery details.</p>
+
+                    <div id="signin-alert" class="auth-alert"></div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="si-email">Email Address <span
+                                style="font-size:0.72rem;color:#aaa;font-weight:400;">(or admin/developer
+                                username)</span></label>
+                        <input class="field-input" type="text" id="si-email" placeholder="you@example.com or admin"
+                            autocomplete="username" required>
+                        <span class="field-error" id="si-email-err">Please enter a valid email address.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="si-password">Password</label>
+                        <div class="password-wrap">
+                            <input class="field-input" type="password" id="si-password" placeholder=""
+                                autocomplete="current-password" required>
+                            <button type="button" class="toggle-pw"
+                                onclick="togglePw('si-password', this)">Show</button>
+                        </div>
+                        <span class="field-error" id="si-pass-err">Password is required.</span>
+                    </div>
+
+                    <button type="submit" class="auth-submit" id="signin-btn">Sign In</button>
+
+                    <div style="text-align:right;margin-top:0.75rem;margin-bottom:0.25rem;">
+                        <a onclick="showForgotPassword()"
+                            style="font-size:0.82rem;color:#D4700A;cursor:pointer;text-decoration:none;"
+                            onmouseover="this.style.textDecoration='underline'"
+                            onmouseout="this.style.textDecoration='none'">Forgot password?</a>
+                    </div>
+
+                    <div class="auth-switch">
+                        Don't have an account? <a onclick="switchTab('signup')">Create one</a>
+                    </div>
+                </form>
+
+                <!-- -- SIGN UP FORM -- -->
+                <form class="auth-form" id="form-signup" onsubmit="handleSignUp(event); return false;" novalidate>
+                    <h2 class="form-title">Create your account</h2>
+                    <p class="form-subtitle">Fill in your details so we can deliver your order right to your door.</p>
+
+                    <div id="signup-alert" class="auth-alert"></div>
+
+                    <!-- Personal Info -->
+                    <div class="section-divider">Personal Information</div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label class="field-label" for="su-fname">First Name *</label>
+                            <input class="field-input" type="text" id="su-fname" placeholder="Amara"
+                                autocomplete="given-name" required>
+                            <span class="field-error" id="su-fname-err">First name is required.</span>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="su-lname">Last Name *</label>
+                            <input class="field-input" type="text" id="su-lname" placeholder="Okafor"
+                                autocomplete="family-name" required>
+                            <span class="field-error" id="su-lname-err">Last name is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-email">Email Address *</label>
+                        <input class="field-input" type="email" id="su-email" placeholder="you@example.com"
+                            autocomplete="email" required>
+                        <span class="field-error" id="su-email-err">Please enter a valid email address.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-phone">Phone Number *</label>
+                        <input class="field-input" type="tel" id="su-phone" placeholder="+234 800 000 0000"
+                            autocomplete="tel" required>
+                        <span class="field-error" id="su-phone-err">Please enter a valid phone number.</span>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="section-divider">Delivery Address</div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-address">Street Address *</label>
+                        <input class="field-input" type="text" id="su-address" placeholder="12 Adeola Odeku Street"
+                            autocomplete="street-address" required>
+                        <span class="field-error" id="su-address-err">Street address is required.</span>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label class="field-label" for="su-city">City *</label>
+                            <input class="field-input" type="text" id="su-city" placeholder="Lagos"
+                                autocomplete="address-level2" required>
+                            <span class="field-error" id="su-city-err">City is required.</span>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="su-state">State *</label>
+                            <input class="field-input" type="text" id="su-state" list="state-list"
+                                placeholder="e.g. Lagos" autocomplete="address-level1" required>
+                            <datalist id="state-list">
+                                <option value="Abia">
+                                <option value="Adamawa">
+                                <option value="Akwa Ibom">
+                                <option value="Anambra">
+                                <option value="Bauchi">
+                                <option value="Bayelsa">
+                                <option value="Benue">
+                                <option value="Borno">
+                                <option value="Cross River">
+                                <option value="Delta">
+                                <option value="Ebonyi">
+                                <option value="Edo">
+                                <option value="Ekiti">
+                                <option value="Enugu">
+                                <option value="FCT - Abuja">
+                                <option value="Gombe">
+                                <option value="Imo">
+                                <option value="Jigawa">
+                                <option value="Kaduna">
+                                <option value="Kano">
+                                <option value="Katsina">
+                                <option value="Kebbi">
+                                <option value="Kogi">
+                                <option value="Kwara">
+                                <option value="Lagos">
+                                <option value="Nasarawa">
+                                <option value="Niger">
+                                <option value="Ogun">
+                                <option value="Ondo">
+                                <option value="Osun">
+                                <option value="Oyo">
+                                <option value="Plateau">
+                                <option value="Rivers">
+                                <option value="Sokoto">
+                                <option value="Taraba">
+                                <option value="Yobe">
+                                <option value="Zamfara">
+                            </datalist>
+                            <span class="field-error" id="su-state-err">Please enter your state.</span>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label class="field-label" for="su-lga">LGA / District</label>
+                            <input class="field-input" type="text" id="su-lga" placeholder="Victoria Island"
+                                autocomplete="address-level3">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="su-postal">Postal Code</label>
+                            <input class="field-input" type="text" id="su-postal" placeholder="100001"
+                                autocomplete="postal-code">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-landmark">Nearest Landmark</label>
+                        <input class="field-input" type="text" id="su-landmark"
+                            placeholder="Opposite First Bank, beside the mosque...">
+                    </div>
+
+                    <!-- Account Security -->
+                    <div class="section-divider">Account Security</div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-password">Password *</label>
+                        <div class="password-wrap">
+                            <input class="field-input" type="password" id="su-password" placeholder="Min. 8 characters"
+                                autocomplete="new-password" required oninput="checkStrength(this.value)">
+                            <button type="button" class="toggle-pw"
+                                onclick="togglePw('su-password', this)">Show</button>
+                        </div>
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strength-fill"></div>
+                        </div>
+                        <div class="strength-label" id="strength-label"></div>
+                        <span class="field-error" id="su-pass-err">Password must be at least 8 characters.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="su-confirm">Confirm Password *</label>
+                        <div class="password-wrap">
+                            <input class="field-input" type="password" id="su-confirm" placeholder="Repeat password"
+                                autocomplete="new-password" required>
+                            <button type="button" class="toggle-pw" onclick="togglePw('su-confirm', this)">Show</button>
+                        </div>
+                        <span class="field-error" id="su-confirm-err">Passwords do not match.</span>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="su-terms" required>
+                        <label for="su-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+                                Policy</a>. I consent to My African Wear using my address for delivery purposes.</label>
+                    </div>
+                    <span class="field-error" id="su-terms-err" style="margin-top:0.3rem">You must agree to the terms to
+                        continue.</span>
+
+                    <button type="submit" class="auth-submit" id="signup-btn" style="margin-top:1.25rem" disabled>Create
+                        Account</button>
+
+                    <div class="auth-switch">
+                        Already have an account? <a onclick="switchTab('signin')">Sign in</a>
+                    </div>
+                </form>
+
+            </div><!-- /auth-body -->
+        </div><!-- /auth-card -->
+
+        <div class="back-link">
+            <a href="index.html">&#8592; Back to store</a>
+        </div>
+
+    </div><!-- /auth-wrapper -->
+
+    <!-- -- Forgot Password Modal ----------------------------------------------- -->
+    <div id="forgotOverlay"
+        style="display:none;visibility:hidden;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:1rem;transition:opacity 0.3s;">
+        <div
+            style="background:white;border-radius:20px;width:100%;max-width:420px;padding:2.5rem;box-shadow:0 24px 64px rgba(0,0,0,0.35);position:relative;">
+            <button onclick="closeForgotPassword()"
+                style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;color:#aaa;cursor:pointer;line-height:1;"
+                onmouseover="this.style.color='#D4700A'" onmouseout="this.style.color='#aaa'">&times;</button>
+            <div style="text-align:center;margin-bottom:1.5rem;">
+                <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#128273;</div>
+                <h2 style="font-family:'Canela',serif;font-size:1.5rem;color:#2C2C2C;margin-bottom:0.3rem;">Forgot
+                    Password?</h2>
+                <p style="font-size:0.85rem;color:#888;">Enter the email address you used to sign up and we'll send your
+                    password to that email.</p>
+            </div>
+            <div id="fp-alert" class="auth-alert"></div>
+            <form onsubmit="handleForgotPassword(event); return false;" novalidate>
+                <div style="margin-bottom:1.25rem;">
+                    <label style="display:block;font-size:0.8rem;font-weight:600;color:#555;margin-bottom:0.4rem;">Email
+                        Address</label>
+                    <input id="fp-email" type="email" placeholder="you@example.com" autocomplete="email"
+                        class="field-input" style="width:100%;" required>
+                </div>
+                <button id="fp-submit-btn" type="submit" class="auth-submit">Send Password</button>
+            </form>
+            <div style="text-align:center;margin-top:1rem;">
+                <a onclick="closeForgotPassword()"
+                    style="font-size:0.82rem;color:#888;cursor:pointer;text-decoration:none;"
+                    onmouseover="this.style.color='#D4700A'" onmouseout="this.style.color='#888'">&#8592; Back to Sign
+                    In</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="supabase.js"></script>
+    <!-- EmailJS SDK  used for forgot password email delivery -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // -- EmailJS config ---------------------------------------------------------
+        // SETUP INSTRUCTIONS (one-time, 5 minutes):
+        // 1. Go to https://www.emailjs.com and create a free account
+        // 2. Add an Email Service (Gmail/Outlook) ? copy the Service ID below
+        // 3. Create an Email Template with variables: {{to_email}}, {{to_name}}, {{password}}
+        //    Subject: "Your My African Wear Password"
+        //    Body: "Hi {{to_name}}, your password is: {{password}}"
+        //    Copy the Template ID below
+        // 4. Go to Account ? API Keys ? copy your Public Key below
+        // EmailJS configuration (for password reset notifications)
+        // NOTE: In production, these should be stored in environment variables
+        const EMAILJS_SERVICE_ID = 'service_vl7sk6v';
+        const EMAILJS_TEMPLATE_ID = 'template_axkmt56r';
+        const EMAILJS_PUBLIC_KEY = 'gGJGK4A-8Om25exR';
+
+        // Initialize EmailJS with correct syntax
+        if (typeof emailjs !== 'undefined') {
+            try {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            } catch (err) {
+                console.warn('EmailJS initialization failed:', err.message);
+            }
+        }
+    </script>
+    <script>
+        // --- Tab switching ------------------------------------------------------------
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('form-' + tab).classList.add('active');
+            clearAlerts();
+        }
+
+        function clearAlerts() {
+            document.querySelectorAll('.auth-alert').forEach(a => { a.className = 'auth-alert'; a.textContent = ''; });
+            document.querySelectorAll('.field-input, .field-select').forEach(i => i.classList.remove('error'));
+            document.querySelectorAll('.field-error').forEach(e => e.classList.remove('show'));
+        }
+
+        // --- Password toggle ----------------------------------------------------------
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+            else { input.type = 'password'; btn.textContent = 'Show'; }
+        }
+
+        // --- Password strength --------------------------------------------------------
+        function checkStrength(val) {
+            const fill = document.getElementById('strength-fill');
+            const label = document.getElementById('strength-label');
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            const levels = [
+                { w: '0%', bg: '#e8e0d8', text: '' },
+                { w: '25%', bg: '#e53e3e', text: 'Weak' },
+                { w: '50%', bg: '#f59e0b', text: 'Fair' },
+                { w: '75%', bg: '#3b82f6', text: 'Good' },
+                { w: '100%', bg: '#48bb78', text: 'Strong' }
+            ];
+            const l = levels[score];
+            fill.style.width = l.w;
+            fill.style.background = l.bg;
+            label.textContent = l.text;
+            label.style.color = l.bg;
+        }
+
+        // --- Validation helpers -------------------------------------------------------
+        function showErr(inputId, errId) {
+            document.getElementById(inputId).classList.add('error');
+            document.getElementById(errId).classList.add('show');
+        }
+
+        function clearErr(inputId, errId) {
+            document.getElementById(inputId).classList.remove('error');
+            document.getElementById(errId).classList.remove('show');
+        }
+
+        function showAlert(formId, msg, type) {
+            const el = document.getElementById(formId + '-alert');
+            el.textContent = msg;
+            el.className = 'auth-alert ' + type;
+        }
+
+        // --- Session helpers ----------------------------------------------------------
+        function setCurrentUser(user) {
+            const { password, ...safe } = user;
+            sessionStorage.setItem('afriUser', JSON.stringify(safe));
+        }
+        function getCurrentUser() {
+            try { return JSON.parse(sessionStorage.getItem('afriUser')); } catch (e) { return null; }
+        }
+
+        // --- Sign In ------------------------------------------------------------------
+        // NOTE: In production, admin/dev credentials should be stored securely on the backend
+        // For development only - credentials are fetched from IndexedDB settings store
+
+        async function handleSignIn(e) {
+            e.preventDefault();
+            clearAlerts();
+            const email = document.getElementById('si-email').value.trim().toLowerCase();
+            const password = document.getElementById('si-password').value;
+            let valid = true;
+            if (!email) { showErr('si-email', 'si-email-err'); valid = false; }
+            if (!password) { showErr('si-password', 'si-pass-err'); valid = false; }
+            if (!valid) return;
+
+            try {
+                // Fetch admin/dev credentials securely from database with timeout
+                let storedAdminPass = null;
+                let storedDevPass = null;
+                try {
+                    const _timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 3000));
+                    const _fetches = Promise.all([MAWdb.settings.get('adminPass'), MAWdb.settings.get('devPass')]);
+                    const [_ap, _dp] = await Promise.race([_fetches, _timeout]);
+                    storedAdminPass = _ap;
+                    storedDevPass = _dp;
+                } catch (dbErr) {
+                    console.error('Database error fetching admin credentials:', dbErr.message);
+                }
+
+                // Developer shortcut (only if credentials are set in database)
+                if (storedDevPass && email === 'developer' && password === storedDevPass) {
+                    sessionStorage.setItem('mawDevAuth', '1');
+                    showAlert('signin', 'Developer access granted. Redirecting...', 'success');
+                    document.getElementById('signin-btn').disabled = true;
+                    setTimeout(() => { window.location.href = 'dev-dashboard.html'; }, 1200);
+                    return;
+                }
+
+                // Admin shortcut (only if credentials are set in database)
+                if (storedAdminPass && email === 'admin' && password === storedAdminPass) {
+                    sessionStorage.setItem('afriAdminAuth', '1');
+                    showAlert('signin', 'Welcome, Admin! Redirecting to dashboard', 'success');
+                    document.getElementById('signin-btn').disabled = true;
+                    setTimeout(() => { window.location.href = 'admin.html'; }, 1200);
+                    return;
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showErr('si-email', 'si-email-err'); return;
+                }
+
+                const user = await MAWdb.users.getByEmail(email);
+                if (!user) {
+                    showAlert('signin', 'Incorrect email or password. Please try again.', 'error');
+                    return;
+                }
+                // Support both SHA-256 hash (new) and btoa (legacy migration)
+                const passwordHash = await MAWdb.hashPassword(password);
+                const legacyHash = btoa(password);
+                const valid_pw = (user.password_hash === passwordHash) || (user.password_hash === legacyHash) || (user.password === legacyHash);
+                if (!valid_pw) {
+                    showAlert('signin', 'Incorrect email or password. Please try again.', 'error');
+                    return;
+                }
+
+                setCurrentUser(user);
+                showAlert('signin', `Welcome back, ${user.firstName}! Redirecting`, 'success');
+                document.getElementById('signin-btn').disabled = true;
+                const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+                setTimeout(() => { window.location.href = redirect; }, 1200);
+            } catch (err) {
+                console.error('Sign in error:', err);
+                showAlert('signin', 'An error occurred. Please try again.', 'error');
+            }
+        }
+
+        // --- Sign Up ------------------------------------------------------------------
+        async function handleSignUp(e) {
+            e.preventDefault();
+            clearAlerts();
+            const firstName = document.getElementById('su-fname').value.trim();
+            const lastName = document.getElementById('su-lname').value.trim();
+            const email = document.getElementById('su-email').value.trim().toLowerCase();
+            const phone = document.getElementById('su-phone').value.trim();
+            const address = document.getElementById('su-address').value.trim();
+            const city = document.getElementById('su-city').value.trim();
+            const state = document.getElementById('su-state').value;
+            const lga = document.getElementById('su-lga').value.trim();
+            const postal = document.getElementById('su-postal').value.trim();
+            const landmark = document.getElementById('su-landmark').value.trim();
+            const password = document.getElementById('su-password').value;
+            const confirm = document.getElementById('su-confirm').value;
+            const terms = document.getElementById('su-terms').checked;
+            let valid = true;
+
+            if (!firstName) { showErr('su-fname', 'su-fname-err'); valid = false; }
+            if (!lastName) { showErr('su-lname', 'su-lname-err'); valid = false; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('su-email', 'su-email-err'); valid = false; }
+            if (!phone || phone.replace(/\D/g, '').length < 10) { showErr('su-phone', 'su-phone-err'); valid = false; }
+            if (!address) { showErr('su-address', 'su-address-err'); valid = false; }
+            if (!city) { showErr('su-city', 'su-city-err'); valid = false; }
+            if (!state) { showErr('su-state', 'su-state-err'); valid = false; }
+            if (password.length < 8) { showErr('su-password', 'su-pass-err'); valid = false; }
+            if (password !== confirm) { showErr('su-confirm', 'su-confirm-err'); valid = false; }
+            if (!terms) { document.getElementById('su-terms-err').classList.add('show'); valid = false; }
+            if (!valid) return;
+
+            try {
+                await MAWdb.init();
+                const existing = await MAWdb.users.getByEmail(email);
+                if (existing) {
+                    showAlert('signup', 'An account with this email already exists. Please sign in.', 'error');
+                    showErr('su-email', 'su-email-err');
+                    document.getElementById('su-email-err').textContent = 'Email already registered.';
+                    return;
+                }
+
+                const passwordHash = await MAWdb.hashPassword(password);
+                const newUser = {
+                    firstName, lastName, email, phone,
+                    delivery: { address, city, state, lga, postal, landmark },
+                    password_hash: passwordHash,
+                    createdAt: new Date().toISOString()
+                };
+                await MAWdb.users.save(newUser);
+                // Store safe version in session (no password)
+                setCurrentUser({ ...newUser, password_hash: undefined });
+                showAlert('signup', `Account created! Welcome, ${firstName}. Redirecting`, 'success');
+                document.getElementById('signup-btn').disabled = true;
+                const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+                setTimeout(() => { window.location.href = redirect; }, 1400);
+            } catch (err) {
+                console.error('Sign up error:', err);
+                showAlert('signup', 'An error occurred during registration. Please try again.', 'error');
+            }
+        }
+
+        // --- Auto-switch tab from URL param ------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            const tab = new URLSearchParams(window.location.search).get('tab');
+            if (tab === 'signup') switchTab('signup');
+            if (getCurrentUser()) {
+                const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+                window.location.href = redirect;
+            }
+            const termsBox = document.getElementById('su-terms');
+            const signupBtn = document.getElementById('signup-btn');
+            termsBox.addEventListener('change', () => { signupBtn.disabled = !termsBox.checked; });
+        });
+
+        // --- Forgot Password ----------------------------------------------------------
+        function showForgotPassword() {
+            document.getElementById('forgotOverlay').style.opacity = '0';
+            document.getElementById('forgotOverlay').style.visibility = 'visible';
+            document.getElementById('forgotOverlay').style.display = 'flex';
+            setTimeout(() => { document.getElementById('forgotOverlay').style.opacity = '1'; }, 10);
+            document.getElementById('fp-email').value = '';
+            document.getElementById('fp-alert').className = 'auth-alert';
+            document.getElementById('fp-alert').textContent = '';
+            document.getElementById('fp-submit-btn').disabled = false;
+            document.getElementById('fp-submit-btn').textContent = 'Send Password';
+        }
+
+        function closeForgotPassword() {
+            const overlay = document.getElementById('forgotOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; overlay.style.visibility = 'hidden'; }, 300);
+        }
+
+        function showFpAlert(msg, type) {
+            const el = document.getElementById('fp-alert');
+            el.textContent = msg;
+            el.className = 'auth-alert ' + type;
+        }
+
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('fp-email').value.trim().toLowerCase();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showFpAlert('Please enter a valid email address.', 'error'); return;
+            }
+
+            const btn = document.getElementById('fp-submit-btn');
+            btn.disabled = true;
+            btn.textContent = 'Sending&hellip;';
+
+            await MAWdb.init();
+            const user = await MAWdb.users.getByEmail(email);
+
+            if (!user) {
+                // Security: same message whether email exists or not
+                showFpAlert('If an account with that email exists, a reset link has been sent.', 'success');
+                btn.textContent = 'Send Reset Link';
+                btn.disabled = false;
+                return;
+            }
+
+            // Generate a temporary reset token and store it
+            const resetToken = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+                .map(b => b.toString(16).padStart(2, '0')).join('');
+            const resetExpiry = new Date(Date.now() + 3600000).toISOString(); // 1 hour
+            await MAWdb.settings.set('reset_' + email, resetToken + '|' + resetExpiry);
+
+            const resetLink = window.location.origin + window.location.pathname.replace('auth.html', '') + 'auth.html?reset=' + resetToken + '&email=' + encodeURIComponent(email);
+
+            if (typeof emailjs !== 'undefined') {
+                try {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        to_email: user.email,
+                        to_name: user.firstName + ' ' + user.lastName,
+                        password: 'Use this link to reset your password (valid 1 hour):\n' + resetLink
+                    });
+                    showFpAlert('A password reset link has been sent to ' + user.email + '.', 'success');
+                } catch (err) {
+                    console.error('EmailJS error:', err);
+                    showFpAlert('Email failed. Reset link: ' + resetLink, 'success');
+                }
+            } else {
+                showFpAlert('Reset link (copy this): ' + resetLink, 'success');
+            }
+
+            btn.textContent = 'Send Reset Link';
+            btn.disabled = false;
+        }
+
+        // Close overlay on background click
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('forgotOverlay').addEventListener('click', function (e) {
+                if (e.target === this) closeForgotPassword();
+            });
+        });
+    </script>
+</body>
+
+</html>

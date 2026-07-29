@@ -1,0 +1,1694 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - My African Wear | Authentic African Fashion</title>
+    <meta name="description"
+        content="Review your selected African wear and complete your purchase. Free shipping on orders over GH150.">
+    <link href="https://fonts.googleapis.com/css2?family=Suisse+Int'l:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'warm-white': '#FDF8F2',
+                        'oat': '#F7EFE0',
+                        'fog-gray': '#EDE5D8',
+                        'charcoal': '#2C2C2C',
+                        'sage': '#D4700A'
+                    },
+                    fontFamily: {
+                        'display': ['Canela', 'serif'],
+                        'body': ["Suisse Int'l", 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #FDF8F2 0%, #F7EFE0 100%);
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 248, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #D4700A;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4700A;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cart-counter {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #D4700A;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* -- Cart Button ---------------------------------------------------------- */
+        .nav-cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.9rem 0.38rem 0.65rem;
+            background: #D4700A;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(212, 112, 10, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 16px rgba(212, 112, 10, 0.5);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .float-cart-btn {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            background: #D4700A;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(212, 112, 10, 0.5);
+            z-index: 1100;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        @media (max-width: 768px) {
+            .float-cart-btn {
+                display: flex;
+            }
+
+            .nav-cart-btn {
+                display: none;
+            }
+        }
+
+        .float-cart-btn:hover {
+            background: #B85E08;
+            transform: scale(1.08);
+        }
+
+        .float-cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 19px;
+            height: 19px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 3px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes cart-bounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            30% {
+                transform: translateY(-4px) scale(1.1);
+            }
+
+            60% {
+                transform: translateY(-1px) scale(1.04);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes badge-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.6);
+                background: #e53e3e;
+            }
+
+            100% {
+                transform: scale(1);
+                background: #2C2C2C;
+            }
+        }
+
+        .nav-cart-btn.cart-bounce,
+        .float-cart-btn.cart-bounce {
+            animation: cart-bounce 0.55s cubic-bezier(.36, .07, .19, .97);
+        }
+
+        .nav-cart-badge.badge-pop,
+        .float-cart-badge.badge-pop {
+            animation: badge-pop 0.4s ease;
+        }
+
+        .page-header {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, #F7EFE0 0%, #EDE5D8 100%);
+        }
+
+        .page-title {
+            font-family: 'Canela', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #2C2C2C;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 4rem;
+        }
+
+        .cart-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Canela', serif;
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            color: #2C2C2C;
+        }
+
+        .cart-items {
+            min-height: 200px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #EDE5D8;
+            align-items: center;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-item-details h4 {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2C2C2C;
+        }
+
+        .cart-item-details p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-details .price {
+            font-weight: 600;
+            color: #D4700A;
+            font-size: 1rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #F7EFE0;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .quantity-controls button {
+            background: #D4700A;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-controls button:hover {
+            background: #B85E08;
+            transform: scale(1.1);
+        }
+
+        .quantity-controls span {
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-item {
+            background: none;
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-item:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .cart-size-select {
+            padding: 0.3rem 0.5rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .cart-size-select:focus {
+            outline: none;
+            border-color: #D4700A;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-cart p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .continue-shopping-btn {
+            display: inline-block;
+            background: #D4700A;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .continue-shopping-btn:hover {
+            background: #B85E08;
+            transform: translateY(-2px);
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2C2C2C;
+        }
+
+        .cart-totals {
+            margin-bottom: 2rem;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .totals-row.total {
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-top: 1px solid #EDE5D8;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .promo-code {
+            margin-bottom: 2rem;
+        }
+
+        .promo-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .promo-input:focus {
+            outline: none;
+            border-color: #D4700A;
+        }
+
+        .apply-promo-btn {
+            width: 100%;
+            background: #F7EFE0;
+            color: #666;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .apply-promo-btn:hover {
+            background: #D4700A;
+            color: white;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .trust-badges {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid #EDE5D8;
+        }
+
+        .trust-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .trust-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #D4700A;
+        }
+
+        .recommendations {
+            margin-top: 4rem;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #F7EFE0 0%, #EDE5D8 100%);
+        }
+
+        .recommendations-title {
+            font-family: 'Canela', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2C2C2C;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .recommendation-image {
+            aspect-ratio: 1;
+            overflow: hidden;
+        }
+
+        .recommendation-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .recommendation-card:hover .recommendation-image img {
+            transform: scale(1.05);
+        }
+
+        .recommendation-info {
+            padding: 1.5rem;
+        }
+
+        .recommendation-name {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2C2C2C;
+        }
+
+        .recommendation-price {
+            font-weight: 600;
+            color: #D4700A;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-small {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart-small:hover {
+            background: #B85E08;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .success-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background: #D4700A;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .success-title {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #2C2C2C;
+        }
+
+        .success-text {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-btn {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .success-btn:hover {
+            background: #B85E08;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #EDE5D8;
+            border-top: 3px solid #D4700A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-header {
+                padding: 6rem 0 2.5rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+
+            .cart-item-controls {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-top: 1rem;
+            }
+
+            .cart-item-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .recommendations-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        /* -- Mobile Nav Drawer --------------------------------------------------- */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(253, 248, 242, 0.98);
+            border-top: 1px solid #EDE5D8;
+            padding: 1rem 1.5rem 1.5rem;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a,
+        .mobile-menu span {
+            display: block;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #2C2C2C;
+            text-decoration: none;
+            border-bottom: 1px solid #EDE5D8;
+        }
+
+        .mobile-menu a:last-child,
+        .mobile-menu span:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #D4700A;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #2C2C2C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        @media (max-width: 480px) {
+
+            .cart-section,
+            .cart-summary {
+                padding: 1.25rem;
+            }
+
+            .quantity-controls {
+                padding: 0.35rem;
+            }
+        }
+
+        /* -- Payment Modal --------------------------------------------------- */
+        .payment-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .payment-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-modal {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(30px) scale(0.97);
+            transition: transform 0.3s ease;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+        }
+
+        .payment-overlay.show .payment-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .payment-header {
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: 1px solid #f0ebe4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .payment-header h2 {
+            font-family: 'Canela', serif;
+            font-size: 1.4rem;
+            color: #2C2C2C;
+        }
+
+        .payment-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .payment-close:hover {
+            color: #D4700A;
+        }
+
+        .payment-body {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .payment-amount {
+            background: #f9f6f2;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-amount span {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .payment-amount strong {
+            font-size: 1.3rem;
+            color: #D4700A;
+            font-weight: 700;
+        }
+
+        /* Method selector */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .method-btn {
+            border: 2px solid #e8e0d8;
+            border-radius: 12px;
+            padding: 0.85rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .method-btn:hover {
+            border-color: #D4700A;
+            background: #fff5f0;
+        }
+
+        .method-btn.selected {
+            border-color: #D4700A;
+            background: #fff5f0;
+            box-shadow: 0 0 0 3px rgba(212, 112, 10, 0.15);
+        }
+
+        .method-btn .method-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D4700A;
+        }
+
+        .method-btn.selected .method-icon {
+            color: #D4700A;
+        }
+
+        .method-btn .method-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Payment forms */
+        .payment-form-section {
+            display: none;
+        }
+
+        .payment-form-section.active {
+            display: block;
+        }
+
+        .pay-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .pay-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .pay-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e8e0d8;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .pay-input:focus {
+            border-color: #D4700A;
+        }
+
+        .pay-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-icon {
+            background: #f4f1ec;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .bank-info {
+            background: #f9f6f2;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .bank-info strong {
+            color: #2C2C2C;
+        }
+
+        .bank-info span {
+            color: #D4700A;
+            font-weight: 600;
+        }
+
+        .ussd-code {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D4700A;
+            text-align: center;
+            letter-spacing: 2px;
+            padding: 1rem;
+            background: #fff5f0;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .pay-note {
+            font-size: 0.78rem;
+            color: #aaa;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .pay-submit {
+            width: 100%;
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .pay-submit:hover {
+            background: #B85E08;
+        }
+
+        .pay-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pay-alert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .pay-alert.error {
+            background: #fff5f5;
+            color: #e53e3e;
+            border: 1px solid #fecaca;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html"><img src="resources/logo.jpeg" alt="My African Wear"
+                            style="height:44px;width:auto;object-fit:contain;"></a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="products.html"
+                            class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Products</a>
+                        <a href="classes.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Classes</a>
+                        <a href="orders.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">My Orders</a>
+                        <a href="story.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Our Story</a>
+                        <span id="nav-user-area"></span>
+                        <a href="cart.html" class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            Cart
+                            <span class="nav-cart-badge" id="navCartBadge" style="display:none;">0</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false"
+                        onclick="toggleMobileMenu()">
+                        <svg id="hamburgerIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="closeIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu drawer -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="classes.html">Classes</a>
+            <a href="orders.html">My Orders</a>
+            <a href="story.html">Our Story</a>
+            <span id="mobile-user-area"></span>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container mx-auto px-4">
+            <h1 class="page-title">Shopping Cart</h1>
+            <p class="page-subtitle">Review your selected items and complete your purchase. Free shipping on orders over
+                GH150.</p>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <section class="cart-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+                <h2 class="section-title" style="margin-bottom:0;">Your Items</h2>
+                <button onclick="confirmClearCart()" id="clearCartBtn"
+                    style="display:none;background:none;border:1px solid #ff6b6b;color:#ff6b6b;padding:0.45rem 1rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;"
+                    onmouseover="this.style.background='#ff6b6b';this.style.color='white';"
+                    onmouseout="this.style.background='none';this.style.color='#ff6b6b';">
+                    &#128465; Clear All
+                </button>
+            </div>
+            <div class="cart-items"></div>
+        </section>
+
+        <aside class="cart-summary">
+            <h2 class="summary-title">Order Summary</h2>
+            <div class="cart-totals"></div>
+            <div class="promo-code">
+                <input type="text" class="promo-input" placeholder="Enter promo code" id="promoCode">
+                <button class="apply-promo-btn" onclick="applyPromoCode()">Apply Code</button>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()" id="checkoutBtn">Proceed to Checkout</button>
+            <div class="trust-badges">
+                <p class="trust-text">Secure checkout with SSL encryption</p>
+                <div class="trust-icons">
+                    <span> Secure</span>
+                    <span> Free Shipping</span>
+                    <span> Easy Returns</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <section class="recommendations">
+        <div class="container mx-auto px-4">
+            <h2 class="recommendations-title">You Might Also Like</h2>
+            <div class="recommendations-grid">
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-charcoal text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 My African Wear. Celebrating African heritage through fashion.</p>
+        </div>
+    </footer>
+
+    <!-- -- Payment Modal ---------------------------------------------------- -->
+    <div class="payment-overlay" id="paymentOverlay">
+        <div class="payment-modal">
+            <div class="payment-header">
+                <h2>Secure Checkout</h2>
+                <button class="payment-close" onclick="closePaymentModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="payment-body">
+
+                <!-- Order total -->
+                <div class="payment-amount">
+                    <span>Amount to pay</span>
+                    <strong id="payModalTotal">GH0.00</strong>
+                </div>
+
+                <!-- Method picker -->
+                <p style="font-size:0.82rem;font-weight:600;color:#555;margin-bottom:0.75rem">Choose payment method</p>
+                <div class="payment-methods">
+                    <button class="method-btn" onclick="selectMethod('card')" id="method-card">
+                        <span class="method-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="1.5">
+                                <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" />
+                                <path stroke-linecap="round" d="M2 10h20" />
+                                <path stroke-linecap="round" stroke-width="2" d="M6 15h4" />
+                            </svg>
+                        </span>
+                        <span class="method-label">Debit / Credit Card</span>
+                    </button>
+                    <button class="method-btn" onclick="selectMethod('transfer')" id="method-transfer">
+                        <span class="method-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 6l9-3 9 3v6c0 5-4 8-9 9-5-1-9-4-9-9V6z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                            </svg>
+                        </span>
+                        <span class="method-label">Bank Transfer</span>
+                    </button>
+                    <button class="method-btn" onclick="selectMethod('ussd')" id="method-ussd">
+                        <span class="method-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="1.5">
+                                <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" />
+                                <path stroke-linecap="round" d="M9 7h6M9 11h6M9 15h3" />
+                                <circle cx="15" cy="15" r="1" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <span class="method-label">USSD</span>
+                    </button>
+                    <button class="method-btn" onclick="selectMethod('wallet')" id="method-wallet">
+                        <span class="method-icon">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 12h5v4h-5a2 2 0 010-4z" />
+                            </svg>
+                        </span>
+                        <span class="method-label">Mobile Wallet</span>
+                    </button>
+                </div>
+
+                <div id="pay-alert" class="pay-alert"></div>
+
+                <!-- -- Card Form -- -->
+                <div class="payment-form-section" id="form-card">
+                    <div class="card-icons">
+                        <span class="card-icon" style="background:#1a1f71;color:white">VISA</span>
+                        <span class="card-icon" style="background:#eb001b;color:white">MC</span>
+                        <span class="card-icon" style="background:#006b3f;color:white">GhIPSS</span>
+                    </div>
+                    <p class="pay-note" style="margin-bottom:0.75rem">We accept Visa, Mastercard, and GhIPSS
+                        debit/credit cards issued by Ghanaian banks.</p>
+                    <div class="pay-field">
+                        <label class="pay-label">Cardholder Name</label>
+                        <input class="pay-input" type="text" id="card-name" placeholder="As it appears on card"
+                            autocomplete="cc-name">
+                    </div>
+                    <div class="pay-field">
+                        <label class="pay-label">Card Number</label>
+                        <input class="pay-input" type="text" id="card-number" placeholder="0000 0000 0000 0000"
+                            maxlength="19" autocomplete="cc-number" oninput="formatCardNumber(this)">
+                    </div>
+                    <div class="pay-row">
+                        <div class="pay-field">
+                            <label class="pay-label">Expiry Date</label>
+                            <input class="pay-input" type="text" id="card-expiry" placeholder="MM / YY" maxlength="7"
+                                autocomplete="cc-exp" oninput="formatExpiry(this)">
+                        </div>
+                        <div class="pay-field">
+                            <label class="pay-label">CVV / CVC</label>
+                            <input class="pay-input" type="password" id="card-cvv" placeholder="???" maxlength="4"
+                                autocomplete="cc-csc">
+                        </div>
+                    </div>
+                    <div class="pay-field">
+                        <label class="pay-label">Issuing Bank (optional)</label>
+                        <input class="pay-input" type="text" id="card-bank" list="card-bank-list"
+                            placeholder="e.g. GCB, Ecobank, Absa">
+                        <datalist id="card-bank-list">
+                            <option value="GCB Bank">
+                            <option value="Ecobank Ghana">
+                            <option value="Absa Bank Ghana">
+                            <option value="Fidelity Bank Ghana">
+                            <option value="Stanbic Bank Ghana">
+                            <option value="Zenith Bank Ghana">
+                            <option value="CalBank">
+                            <option value="Agricultural Development Bank">
+                            <option value="Republic Bank Ghana">
+                            <option value="Standard Chartered Ghana">
+                        </datalist>
+                    </div>
+                    <p class="pay-note">&#128274; Your card details are encrypted and processed securely. Amount will be
+                        charged in GHS at the prevailing exchange rate.</p>
+                    <button class="pay-submit" onclick="submitPayment('card')">Pay Now</button>
+                </div>
+
+                <!-- -- Bank Transfer Form -- -->
+                <div class="payment-form-section" id="form-transfer">
+                    <div class="bank-info">
+                        <div><strong>Bank:</strong> GCB Bank Ghana</div>
+                        <div><strong>Account Name:</strong> My African Wear Ltd</div>
+                        <div><strong>Account Number:</strong> <span>1234567890</span></div>
+                        <div><strong>Branch:</strong> Accra Main Branch</div>
+                        <div><strong>Reference:</strong> <span id="transfer-ref">&mdash;</span></div>
+                    </div>
+                    <p class="pay-note">Transfer the exact amount shown above and use the reference number. Your order
+                        will be confirmed within 1?2 hours after payment is verified.</p>
+                    <div class="pay-field">
+                        <label class="pay-label">Your Bank Name</label>
+                        <input class="pay-input" type="text" id="transfer-bank" list="transfer-bank-list"
+                            placeholder="e.g. GCB, Ecobank, Absa">
+                        <datalist id="transfer-bank-list">
+                            <option value="GCB Bank">
+                            <option value="Ecobank Ghana">
+                            <option value="Absa Bank Ghana">
+                            <option value="Fidelity Bank Ghana">
+                            <option value="Stanbic Bank Ghana">
+                            <option value="Zenith Bank Ghana">
+                            <option value="CalBank">
+                            <option value="Agricultural Development Bank">
+                            <option value="Republic Bank Ghana">
+                            <option value="Standard Chartered Ghana">
+                        </datalist>
+                    </div>
+                    <div class="pay-field">
+                        <label class="pay-label">Transfer Receipt / Proof (optional)</label>
+                        <input class="pay-input" type="text" id="transfer-proof"
+                            placeholder="Transaction ID or screenshot description">
+                    </div>
+                    <button class="pay-submit" onclick="submitPayment('transfer')">I Have Transferred</button>
+                </div>
+
+                <!-- -- USSD Form -- -->
+                <div class="payment-form-section" id="form-ussd">
+                    <p style="font-size:0.85rem;color:#555;margin-bottom:0.75rem">Dial the code below on your phone to
+                        pay:</p>
+                    <div class="ussd-code" id="ussd-code">*737*000*<span id="ussd-amount">0</span>#</div>
+                    <p class="pay-note">This is a demo USSD code. In production, this would be generated by your payment
+                        processor (e.g. Paystack, Flutterwave). Follow the prompts on your phone to complete payment.
+                    </p>
+                    <div class="pay-field">
+                        <label class="pay-label">Select Your Bank</label>
+                        <input class="pay-input" type="text" id="ussd-bank" list="ussd-bank-list"
+                            placeholder="e.g. GCB, Ecobank, Absa">
+                        <datalist id="ussd-bank-list">
+                            <option value="GCB Bank  *422#">
+                            <option value="Ecobank Ghana  *326#">
+                            <option value="Absa Bank Ghana  *654#">
+                            <option value="Fidelity Bank Ghana  *776#">
+                            <option value="Stanbic Bank Ghana  *788#">
+                            <option value="Zenith Bank Ghana  *966#">
+                            <option value="CalBank  *225#">
+                            <option value="Agricultural Development Bank  *232#">
+                        </datalist>
+                    </div>
+                    <button class="pay-submit" onclick="submitPayment('ussd')">I Have Paid via USSD</button>
+                </div>
+
+                <!-- -- Mobile Wallet Form -- -->
+                <div class="payment-form-section" id="form-wallet">
+                    <div class="payment-methods" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:1rem">
+                        <button class="method-btn" onclick="selectWallet(this,'MTN MoMo')"
+                            style="padding:0.6rem 0.3rem">
+                            <img src="resources/mtn.png" alt="MTN MoMo"
+                                style="width:40px;height:40px;object-fit:contain;border-radius:6px">
+                            <span class="method-label">MTN MoMo</span>
+                        </button>
+                        <button class="method-btn" onclick="selectWallet(this,'Telecel Cash')"
+                            style="padding:0.6rem 0.3rem">
+                            <img src="resources/telecel.png" alt="Telecel Cash"
+                                style="width:40px;height:40px;object-fit:contain;border-radius:6px">
+                            <span class="method-label">Telecel Cash</span>
+                        </button>
+                        <button class="method-btn" onclick="selectWallet(this,'AirtelTigo Money')"
+                            style="padding:0.6rem 0.3rem">
+                            <img src="resources/airteltigo.png" alt="AirtelTigo Money"
+                                style="width:40px;height:40px;object-fit:contain;border-radius:6px">
+                            <span class="method-label">AirtelTigo</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="wallet-provider" value="">
+                    <div class="pay-field">
+                        <label class="pay-label">Mobile Money Number</label>
+                        <input class="pay-input" type="tel" id="wallet-phone" placeholder="+233 24 000 0000"
+                            autocomplete="tel">
+                    </div>
+                    <p class="pay-note">You will receive a payment prompt on your <span id="wallet-name-label">mobile
+                            money</span> account. Approve it to complete your order.</p>
+                    <button class="pay-submit" onclick="submitPayment('wallet')">Send Payment Request</button>
+                </div>
+
+            </div><!-- /payment-body -->
+        </div><!-- /payment-modal -->
+    </div><!-- /payment-overlay -->
+
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✅</div>
+        <h3 class="success-title">Order Placed Successfully!</h3>
+        <p class="success-text">Thank you for your purchase. You will receive a confirmation email shortly.</p>
+        <button class="success-btn" onclick="closeSuccessMessage()">Continue Shopping</button>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('mobileMenuBtn');
+            const hamburger = document.getElementById('hamburgerIcon');
+            const close = document.getElementById('closeIcon');
+            const isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            hamburger.style.display = isOpen ? 'none' : 'block';
+            close.style.display = isOpen ? 'block' : 'none';
+            const desktopArea = document.getElementById('nav-user-area');
+            const mobileArea = document.getElementById('mobile-user-area');
+            if (mobileArea && desktopArea) mobileArea.innerHTML = desktopArea.innerHTML;
+        }
+
+        function confirmClearCart() {
+            if (!app.cart || app.cart.length === 0) return;
+            if (confirm('Remove all ' + app.cart.length + ' item' + (app.cart.length !== 1 ? 's' : '') + ' from your cart?')) {
+                app.clearCart();
+                // Reset promo state
+                window._activePromo = null;
+                window._cartTotal = null;
+                const promoInput = document.getElementById('promoCode');
+                const applyBtn = document.querySelector('.apply-promo-btn');
+                if (promoInput) { promoInput.value = ''; promoInput.disabled = false; promoInput.style.borderColor = ''; promoInput.style.backgroundColor = ''; }
+                if (applyBtn) { applyBtn.textContent = 'Apply Code'; applyBtn.style.background = ''; applyBtn.style.color = ''; applyBtn.disabled = false; }
+            }
+        }
+
+        async function applyPromoCode() {
+            const promoInput = document.getElementById('promoCode');
+            const code = promoInput.value.trim().toUpperCase();
+            if (!code) return;
+
+            await MAWdb.init();
+            const promo = await MAWdb.promoCodes.getByCode(code);
+
+            if (!promo || !promo.active || promo.usedBy) {
+                // Invalid or already used
+                promoInput.style.borderColor = '#ff6b6b';
+                promoInput.style.backgroundColor = '#ffe0e0';
+                const applyBtn = document.querySelector('.apply-promo-btn');
+                applyBtn.textContent = 'Invalid Code';
+                applyBtn.style.background = '#ff6b6b';
+                applyBtn.style.color = 'white';
+                setTimeout(() => {
+                    promoInput.style.borderColor = '';
+                    promoInput.style.backgroundColor = '';
+                    applyBtn.textContent = 'Apply Code';
+                    applyBtn.style.background = '';
+                    applyBtn.style.color = '';
+                }, 2500);
+                return;
+            }
+
+            // Valid code — apply 10% discount
+            window._activePromo = { code: promo.code, discount: promo.discount };
+            promoInput.style.borderColor = '#D4700A';
+            promoInput.style.backgroundColor = '#fff5f0';
+            promoInput.disabled = true;
+            const applyBtn = document.querySelector('.apply-promo-btn');
+            applyBtn.textContent = '✅ Applied — 10% OFF';
+            applyBtn.style.background = '#D4700A';
+            applyBtn.style.color = 'white';
+            applyBtn.disabled = true;
+            app.renderCart(); // re-render to show discount
+        }
+        function proceedToCheckout() {
+            const user = afriGetUser();
+            if (!user) {
+                window.location.href = 'auth.html?redirect=cart.html';
+                return;
+            }
+            if (!app.cart || app.cart.length === 0) return;
+
+            // Use the total calculated by updateCartTotal (includes promo discount)
+            const total = window._cartTotal || (() => {
+                const subtotal = app.cart.reduce((s, i) => s + i.price * i.quantity, 0);
+                const promo = window._activePromo;
+                const discount = promo ? subtotal * promo.discount : 0;
+                const discounted = subtotal - discount;
+                return discounted * 1.08 + (discounted > 150 ? 0 : 15);
+            })();
+
+            document.getElementById('payModalTotal').textContent = 'GH₵' + total.toFixed(2);
+            const ref = 'MAW-' + Date.now().toString(36).toUpperCase();
+            document.getElementById('transfer-ref').textContent = ref;
+            document.getElementById('ussd-amount').textContent = total.toFixed(0);
+
+            // Reset modal state
+            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.payment-form-section').forEach(f => f.classList.remove('active'));
+            document.getElementById('pay-alert').className = 'pay-alert';
+            document.getElementById('pay-alert').textContent = '';
+
+            document.getElementById('paymentOverlay').classList.add('show');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentOverlay').classList.remove('show');
+        }
+
+        // Close on overlay click
+        document.getElementById('paymentOverlay').addEventListener('click', function (e) {
+            if (e.target === this) closePaymentModal();
+        });
+
+        function selectMethod(method) {
+            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.payment-form-section').forEach(f => f.classList.remove('active'));
+            document.getElementById('method-' + method).classList.add('selected');
+            document.getElementById('form-' + method).classList.add('active');
+            document.getElementById('pay-alert').className = 'pay-alert';
+        }
+
+        function selectWallet(btn, name) {
+            btn.closest('.payment-methods').querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('wallet-provider').value = name;
+            document.getElementById('wallet-name-label').textContent = name;
+        }
+
+        // Card number formatting
+        function formatCardNumber(input) {
+            let v = input.value.replace(/\D/g, '').substring(0, 16);
+            input.value = v.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        function formatExpiry(input) {
+            let v = input.value.replace(/\D/g, '').substring(0, 4);
+            if (v.length >= 3) v = v.substring(0, 2) + ' / ' + v.substring(2);
+            input.value = v;
+        }
+
+        function showPayAlert(msg) {
+            const el = document.getElementById('pay-alert');
+            el.textContent = msg;
+            el.className = 'pay-alert error';
+        }
+
+        async function submitPayment(method) {
+            const user = afriGetUser();
+
+            if (method === 'card') {
+                const name = document.getElementById('card-name').value.trim();
+                const number = document.getElementById('card-number').value.replace(/\s/g, '');
+                const expiry = document.getElementById('card-expiry').value.trim();
+                const cvv = document.getElementById('card-cvv').value.trim();
+                if (!name) { showPayAlert('Please enter the cardholder name.'); return; }
+                if (number.length < 16) { showPayAlert('Please enter a valid 16-digit card number.'); return; }
+                if (!/^\d{2}\s*\/\s*\d{2}$/.test(expiry)) { showPayAlert('Please enter a valid expiry date (MM / YY).'); return; }
+                if (cvv.length < 3) { showPayAlert('Please enter a valid CVV.'); return; }
+            }
+            if (method === 'transfer') {
+                if (!document.getElementById('transfer-bank').value.trim()) { showPayAlert('Please enter your bank name.'); return; }
+            }
+            if (method === 'ussd') {
+                if (!document.getElementById('ussd-bank').value.trim()) { showPayAlert('Please select your bank.'); return; }
+            }
+            if (method === 'wallet') {
+                const provider = document.getElementById('wallet-provider').value;
+                const phone = document.getElementById('wallet-phone').value.trim();
+                if (!provider) { showPayAlert('Please select a wallet provider.'); return; }
+                if (!phone || phone.replace(/\D/g, '').length < 10) { showPayAlert('Please enter a valid phone number.'); return; }
+            }
+
+            const btn = document.querySelector('#form-' + method + ' .pay-submit');
+            const orig = btn.textContent;
+            btn.textContent = 'Processing…';
+            btn.disabled = true;
+
+            // Simulate payment processing (2 seconds)
+            await new Promise(r => setTimeout(r, 2000));
+
+            // Save order to Supabase
+            try {
+                const subtotal = app.cart.reduce((s, i) => s + i.price * i.quantity, 0);
+                const promo = window._activePromo;
+                const discount = promo ? subtotal * promo.discount : 0;
+                const discounted = subtotal - discount;
+                const tax = discounted * 0.08;
+                const shipping = discounted > 150 ? 0 : 15;
+                const total = discounted + tax + shipping;
+                const d = user && user.delivery ? user.delivery : {};
+                await MAWdb.orders.add({
+                    user_email: user ? user.email : null,
+                    user_name: user ? user.firstName + ' ' + user.lastName : 'Guest',
+                    items: app.cart,
+                    subtotal: subtotal,
+                    discount: discount,
+                    tax: tax,
+                    shipping: shipping,
+                    total: total,
+                    promo_code: promo ? promo.code : null,
+                    payment_method: method,
+                    delivery_address: d,
+                    status: 'confirmed'
+                });
+            } catch (orderErr) {
+                console.error('Order save failed:', orderErr);
+            }
+
+            // Mark promo code as used
+            if (window._activePromo) {
+                await MAWdb.init();
+                const promo = await MAWdb.promoCodes.getByCode(window._activePromo.code);
+                if (promo) {
+                    promo.usedBy = user ? user.email : 'guest';
+                    promo.usedAt = new Date().toISOString();
+                    promo.active = false;
+                    await MAWdb.promoCodes.update(promo);
+                }
+                window._activePromo = null;
+                window._cartTotal = null;
+            }
+
+            closePaymentModal();
+
+            // Show success
+            const d = user && user.delivery ? user.delivery : {};
+            const deliveryLine = [d.address, d.city, d.state].filter(Boolean).join(', ');
+            document.querySelector('.success-title').textContent = 'Order Placed Successfully!';
+            document.querySelector('.success-text').innerHTML =
+                `Thank you, <strong>${user ? user.firstName : 'Customer'}</strong>! Your order will be delivered to:<br>
+                 <span style="color:#D4700A;font-weight:600">${deliveryLine || 'your saved address'}</span><br>
+                 <small style="color:#888">Confirmation sent to ${user ? user.email : 'your email'}</small>`;
+            document.getElementById('successMessage').classList.add('show');
+            document.querySelector('.success-icon').textContent = '✅';
+            app.clearCart();
+            btn.textContent = orig;
+            btn.disabled = false;
+            setTimeout(() => closeSuccessMessage(), 6000);
+        }
+        function closeSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.remove('show');
+            setTimeout(() => { window.location.href = 'products.html'; }, 300);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const promoInput = document.getElementById('promoCode');
+            promoInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') { applyPromoCode(); } });
+            promoInput.addEventListener('input', function () { this.value = this.value.toUpperCase(); });
+        });
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(253,248,242,0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(253,248,242,0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+    <!-- Floating Cart Button -->
+    <a href="cart.html" class="float-cart-btn" id="floatCartBtn" aria-label="View cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+        <span class="float-cart-badge" id="floatCartBadge" style="display:none;">0</span>
+    </a>
+</body>
+
+</html>

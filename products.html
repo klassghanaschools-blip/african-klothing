@@ -1,0 +1,1211 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - My African Wear | Authentic African Fashion</title>
+    <meta name="description"
+        content="Browse our complete collection of authentic My African Wear for men and women. Filter by style, gender, color, and size to find your perfect piece.">
+    <link href="https://fonts.googleapis.com/css2?family=Suisse+Int'l:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'warm-white': '#FDF8F2',
+                        'oat': '#F7EFE0',
+                        'fog-gray': '#EDE5D8',
+                        'charcoal': '#2C2C2C',
+                        'sage': '#D4700A'
+                    },
+                    fontFamily: {
+                        'display': ['Canela', 'serif'],
+                        'body': ["Suisse Int'l", 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #FDF8F2 0%, #F7EFE0 100%);
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 248, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #D4700A;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4700A;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cart-counter {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #D4700A;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /*  Cart Button (nav + mobile float) ------------------------------------ */
+        /* Desktop: lives inside navbar ? see .nav-cart-btn below */
+        /* Mobile: fixed pill at bottom-right */
+        .float-cart-btn {
+            position: fixed;
+            bottom: 1.75rem;
+            right: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: #D4700A;
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(212, 112, 10, 0.5);
+            z-index: 1100;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        @media (min-width: 769px) {
+            .float-cart-btn {
+                display: none;
+            }
+        }
+
+        .float-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(212, 112, 10, 0.55);
+        }
+
+        .float-cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Nav cart pill  desktop only, inside navbar */
+        .nav-cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.9rem 0.38rem 0.65rem;
+            background: #D4700A;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(212, 112, 10, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(212, 112, 10, 0.5);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 17px;
+            height: 17px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes cart-bounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            30% {
+                transform: translateY(-4px) scale(1.08);
+            }
+
+            60% {
+                transform: translateY(-1px) scale(1.03);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes badge-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.6);
+                background: #e53e3e;
+            }
+
+            100% {
+                transform: scale(1);
+                background: #2C2C2C;
+            }
+        }
+
+        .float-cart-btn.cart-bounce,
+        .nav-cart-btn.cart-bounce {
+            animation: cart-bounce 0.55s cubic-bezier(.36, .07, .19, .97);
+        }
+
+        .float-cart-badge.badge-pop,
+        .nav-cart-badge.badge-pop {
+            animation: badge-pop 0.4s ease;
+        }
+
+        /* -- Page Hero -- */
+        .page-header {
+            min-height: 55vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #2C2C2C 0%, #4a3728 60%, #D4700A 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 4rem;
+        }
+
+        .page-header-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('resources/hero-nature.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.12;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .page-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #D4700A;
+            margin-bottom: 1.25rem;
+        }
+
+        .page-eyebrow::before,
+        .page-eyebrow::after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #D4700A;
+            border-radius: 2px;
+        }
+
+        .page-title {
+            font-family: 'Canela', serif;
+            font-size: clamp(2.25rem, 6vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: #FDF8F2;
+            margin-bottom: 1.25rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.05rem;
+            color: rgba(253, 248, 242, 0.75);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .filters-sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filters-title {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #2C2C2C;
+        }
+
+        .filter-group {
+            margin-bottom: 2rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: block;
+            color: #2C2C2C;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #EDE5D8;
+            border-radius: 4px;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .filter-checkbox:checked {
+            background: #D4700A;
+            border-color: #D4700A;
+        }
+
+        .filter-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .filter-text {
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .price-range {
+            margin-top: 1rem;
+        }
+
+        .price-slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #EDE5D8;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .price-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #D4700A;
+            cursor: pointer;
+        }
+
+        .price-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .clear-filters {
+            background: none;
+            border: 1px solid #D4700A;
+            color: #D4700A;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .clear-filters:hover {
+            background: #D4700A;
+            color: white;
+        }
+
+        .products-area {
+            min-height: 600px;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-counter {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #D4700A;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .product-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-image {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(212, 112, 10, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .quick-view-btn {
+            background: white;
+            color: #D4700A;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-family: 'Canela', serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #2C2C2C;
+        }
+
+        .product-color {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #D4700A;
+            margin-bottom: 1rem;
+        }
+
+        .product-features {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .feature-tag {
+            background: #F7EFE0;
+            color: #666;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .size-select {
+            padding: 0.5rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.85rem;
+            flex: 1;
+        }
+
+        .add-to-cart-btn {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .product-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .modal-details h2 {
+            font-family: 'Canela', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #2C2C2C;
+        }
+
+        .modal-color {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .modal-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #D4700A;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .modal-size-select {
+            padding: 0.75rem;
+            border: 1px solid #EDE5D8;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .modal-add-to-cart {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .modal-add-to-cart:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #EDE5D8;
+            border-top: 3px solid #D4700A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .filters-sidebar {
+                position: static;
+            }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                width: 95%;
+                padding: 1.25rem;
+            }
+        }
+
+        /* -- Mobile Nav Drawer --------------------------------------------------- */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(253, 248, 242, 0.98);
+            border-top: 1px solid #EDE5D8;
+            padding: 1rem 1.5rem 1.5rem;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a,
+        .mobile-menu span {
+            display: block;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #2C2C2C;
+            text-decoration: none;
+            border-bottom: 1px solid #EDE5D8;
+        }
+
+        .mobile-menu a:last-child,
+        .mobile-menu span:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #D4700A;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #2C2C2C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        /* -- Filter Toggle (mobile) ----------------------------------------------- */
+        .filter-toggle-btn {
+            display: none;
+            width: 100%;
+            background: white;
+            border: 1px solid #EDE5D8;
+            border-radius: 10px;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2C2C2C;
+            cursor: pointer;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .filter-toggle-btn:hover {
+            border-color: #D4700A;
+            color: #D4700A;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .page-header {
+                min-height: 45vh;
+                padding-top: 3.5rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .filter-toggle-btn {
+                display: flex;
+            }
+
+            .filters-sidebar {
+                display: none;
+                margin-bottom: 1rem;
+            }
+
+            .filters-sidebar.mobile-open {
+                display: block;
+            }
+
+            .products-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .sort-select {
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .product-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .size-select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html"><img src="resources/logo.jpeg" alt="My African Wear"
+                            style="height:44px;width:auto;object-fit:contain;"></a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="products.html" class="nav-link text-sage px-3 py-2 text-sm font-medium">Products</a>
+                        <a href="classes.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Classes</a>
+                        <a href="orders.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">My Orders</a>
+                        <a href="story.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Our Story</a>
+                        <span id="nav-user-area"></span>
+                        <a href="cart.html" class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            Cart
+                            <span class="nav-cart-badge" id="navCartBadge" style="display:none;">0</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false"
+                        onclick="toggleMobileMenu()">
+                        <svg id="hamburgerIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="closeIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu drawer -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="products.html" style="color:#D4700A;font-weight:600">Products</a>
+            <a href="classes.html">Classes</a>
+            <a href="orders.html">My Orders</a>
+            <a href="story.html">Our Story</a>
+            <span id="mobile-user-area"></span>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="page-header-bg"></div>
+        <div class="page-header-content">
+            <span class="page-eyebrow">The Collection</span>
+            <h1 class="page-title">Our Collection</h1>
+            <p class="page-subtitle">Explore authentic African fashion for men and women, from hand-woven Kente and
+                Aso-Oke to vibrant Ankara prints and flowing Boubou.</p>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <!-- Mobile filter toggle -->
+        <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilters()" aria-expanded="false">
+            <span>&#128269; Filters</span>
+            <span id="filterToggleArrow">&#9660;</span>
+        </button>
+        <aside class="filters-sidebar" id="filtersSidebar">
+            <h2 class="filters-title">Filters</h2>
+
+            <div class="filter-group">
+                <label class="filter-label">Search</label>
+                <input type="text" class="search-bar search-input" placeholder="Search products...">
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Gender</label>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="gender" value="Men" id="men">
+                        <label class="filter-text" for="men">Men</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="gender" value="Women"
+                            id="women">
+                        <label class="filter-text" for="women">Women</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Style</label>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Agbada"
+                            id="agbada">
+                        <label class="filter-text" for="agbada">Agbada</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Kaftan"
+                            id="kaftan">
+                        <label class="filter-text" for="kaftan">Kaftan</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Senator"
+                            id="senator">
+                        <label class="filter-text" for="senator">Senator</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Boubou"
+                            id="boubou">
+                        <label class="filter-text" for="boubou">Boubou</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Aso-Oke"
+                            id="aso-oke">
+                        <label class="filter-text" for="aso-oke">Aso-Oke</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Dress"
+                            id="dress">
+                        <label class="filter-text" for="dress">Ankara Dress</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="category" value="Skirt Set"
+                            id="skirt-set">
+                        <label class="filter-text" for="skirt-set">Skirt Set</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Color</label>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Royal Gold"
+                            id="royal-gold">
+                        <label class="filter-text" for="royal-gold">Royal Gold</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Indigo Blue"
+                            id="indigo-blue">
+                        <label class="filter-text" for="indigo-blue">Indigo Blue</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Ebony Black"
+                            id="ebony-black">
+                        <label class="filter-text" for="ebony-black">Ebony Black</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Terracotta"
+                            id="terracotta">
+                        <label class="filter-text" for="terracotta">Terracotta</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Forest Green"
+                            id="forest-green">
+                        <label class="filter-text" for="forest-green">Forest Green</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" class="filter-checkbox" data-filter-type="color" value="Sunset Orange"
+                            id="sunset-orange">
+                        <label class="filter-text" for="sunset-orange">Sunset Orange</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Price Range</label>
+                <div class="price-range">
+                    <input type="range" class="price-slider price-range-slider" min="0" max="400" value="400" step="10">
+                    <div class="price-display">
+                        <span>GH?0</span>
+                        <span class="max-price">GH?400</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="clear-filters" onclick="app.clearAllFilters()">Clear All Filters</button>
+        </aside>
+
+        <main class="products-area">
+            <div class="products-header">
+                <p class="results-counter">Loading products…</p>
+                <select class="sort-select" onchange="handleSort(this.value)">
+                    <option value="name">Sort by Name</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="newest">Newest First</option>
+                </select>
+            </div>
+
+            <div class="products-grid">
+                <!-- Products loaded dynamically from IndexedDB by main.js -->
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-charcoal text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 My African Wear. Celebrating African heritage through fashion.</p>
+        </div>
+    </footer>
+
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('mobileMenuBtn');
+            const hamburger = document.getElementById('hamburgerIcon');
+            const close = document.getElementById('closeIcon');
+            const isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            hamburger.style.display = isOpen ? 'none' : 'block';
+            close.style.display = isOpen ? 'block' : 'none';
+            const desktopArea = document.getElementById('nav-user-area');
+            const mobileArea = document.getElementById('mobile-user-area');
+            if (mobileArea && desktopArea) mobileArea.innerHTML = desktopArea.innerHTML;
+        }
+
+        function toggleFilters() {
+            const sidebar = document.getElementById('filtersSidebar');
+            const arrow = document.getElementById('filterToggleArrow');
+            const btn = document.getElementById('filterToggleBtn');
+            const isOpen = sidebar.classList.toggle('mobile-open');
+            btn.setAttribute('aria-expanded', isOpen);
+            arrow.textContent = isOpen ? '&#9650;' : '&#9660;';
+        }
+
+        function handleSort(sortBy) {
+            const products = [...app.products];
+            let sorted;
+            switch (sortBy) {
+                case 'price-low': sorted = products.sort((a, b) => a.price - b.price); break;
+                case 'price-high': sorted = products.sort((a, b) => b.price - a.price); break;
+                case 'newest': sorted = products.sort((a, b) => b.id - a.id); break;
+                default: sorted = products.sort((a, b) => a.name.localeCompare(b.name));
+            }
+            app.renderProducts(sorted);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const priceSlider = document.querySelector('.price-range-slider');
+            const maxPriceDisplay = document.querySelector('.max-price');
+            if (priceSlider && maxPriceDisplay) {
+                priceSlider.addEventListener('input', function () {
+                    maxPriceDisplay.textContent = 'GH₵' + this.value;
+                });
+            }
+        });
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(253,248,242,0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(253,248,242,0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+    <!-- Floating Cart Button -->
+    <!-- Mobile floating cart -->
+    <a href="cart.html" class="float-cart-btn" id="floatCartBtn" aria-label="View cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+        <span class="float-cart-badge" id="floatCartBadge" style="display:none;">0</span>
+    </a>
+</body>
+
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - My African Wear</title>
+    <meta name="description" content="Track your My African Wear orders and reorder your favourite items.">
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { 'warm-white': '#FDF8F2', 'oat': '#F7EFE0', 'fog-gray': '#EDE5D8', 'charcoal': '#2C2C2C', 'sage': '#D4700A' }, fontFamily: { 'display': ['Canela', 'serif'] } } }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: #FDF8F2;
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(253, 248, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #D4700A;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4700A;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.9rem 0.38rem 0.65rem;
+            background: #D4700A;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(212, 112, 10, 0.35);
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-cart-btn:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .nav-cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #2C2C2C;
+            color: white;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 2px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #2C2C2C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(253, 248, 242, 0.98);
+            border-top: 1px solid #EDE5D8;
+            padding: 1rem 1.5rem 1.5rem;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a,
+        .mobile-menu span {
+            display: block;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #2C2C2C;
+            text-decoration: none;
+            border-bottom: 1px solid #EDE5D8;
+        }
+
+        .mobile-menu a:last-child,
+        .mobile-menu span:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: #D4700A;
+        }
+
+        /* Page */
+        .page-header {
+            padding: 8rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #F7EFE0 0%, #EDE5D8 100%);
+        }
+
+        .page-title {
+            font-family: 'Canela', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #2C2C2C;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-sub {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Auth gate */
+        .auth-gate {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .auth-gate h2 {
+            font-family: 'Canela', serif;
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .auth-gate p {
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: #D4700A;
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            background: #B85E08;
+            transform: translateY(-2px);
+        }
+
+        /* Loading */
+        .loading-state {
+            text-align: center;
+            padding: 4rem;
+            color: #888;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #EDE5D8;
+            border-top: 3px solid #D4700A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Canela', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        /* Order cards */
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            margin-bottom: 1.5rem;
+            border: 1px solid #f0ebe4;
+            transition: box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #f0ebe4;
+        }
+
+        .order-id {
+            font-family: 'Canela', serif;
+            font-size: 1.1rem;
+            color: #2C2C2C;
+        }
+
+        .order-date {
+            font-size: 0.82rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-confirmed {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+        }
+
+        .status-pending {
+            background: #fffbeb;
+            color: #744210;
+            border: 1px solid #fcd34d;
+        }
+
+        .status-shipped {
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .status-delivered {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .status-cancelled {
+            background: #fff5f5;
+            color: #9b1c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Order items */
+        .order-items {
+            margin-bottom: 1.25rem;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #faf7f4;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-img {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #f4f1ec;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .item-meta {
+            font-size: 0.78rem;
+            color: #888;
+        }
+
+        .item-price {
+            margin-left: auto;
+            font-weight: 600;
+            color: #D4700A;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        /* Totals */
+        .order-totals {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0ebe4;
+        }
+
+        .order-total-amount {
+            font-family: 'Canela', serif;
+            font-size: 1.25rem;
+            color: #D4700A;
+            font-weight: 600;
+        }
+
+        /* Delivery */
+        .order-delivery {
+            font-size: 0.82rem;
+            color: #666;
+            margin-bottom: 1.25rem;
+        }
+
+        .order-delivery strong {
+            color: #2C2C2C;
+        }
+
+        /* Actions */
+        .order-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-reorder {
+            background: #D4700A;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reorder:hover {
+            background: #B85E08;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: none;
+            color: #D4700A;
+            border: 1.5px solid #D4700A;
+            padding: 0.6rem 1.4rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #D4700A;
+            color: white;
+        }
+
+        /* Status tracker */
+        .status-tracker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .tracker-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 64px;
+        }
+
+        .tracker-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #EDE5D8;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #aaa;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .tracker-dot.done {
+            background: #D4700A;
+            border-color: #D4700A;
+            color: white;
+        }
+
+        .tracker-dot.active {
+            background: #D4700A;
+            border-color: #D4700A;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(212, 112, 10, 0.2);
+        }
+
+        .tracker-label {
+            font-size: 0.68rem;
+            color: #888;
+            margin-top: 4px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tracker-label.active {
+            color: #D4700A;
+            font-weight: 600;
+        }
+
+        .tracker-line {
+            flex: 1;
+            height: 2px;
+            background: #EDE5D8;
+            margin: 0 -2px;
+            position: relative;
+            top: -14px;
+        }
+
+        .tracker-line.done {
+            background: #D4700A;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: #2C2C2C;
+            color: white;
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 3px solid #48bb78;
+        }
+
+        @media (max-width:640px) {
+            .order-header {
+                flex-direction: column;
+            }
+
+            .order-actions {
+                flex-direction: column;
+            }
+
+            .btn-reorder,
+            .btn-outline {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><img src="resources/logo.jpeg" alt="My African Wear"
+                        style="height:44px;width:auto;object-fit:contain;"></a>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="products.html"
+                            class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Products</a>
+                        <a href="classes.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Classes</a>
+                        <a href="story.html" class="nav-link text-charcoal px-3 py-2 text-sm font-medium">Our Story</a>
+                        <a href="orders.html" class="nav-link px-3 py-2 text-sm font-medium"
+                            style="color:#D4700A;font-weight:600">My Orders</a>
+                        <span id="nav-user-area"></span>
+                        <a href="cart.html" class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            Cart <span class="nav-cart-badge" id="navCartBadge" style="display:none;">0</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="hamburger-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()"
+                        aria-label="Toggle menu">
+                        <svg id="hamburgerIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="closeIcon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="classes.html">Classes</a>
+            <a href="story.html">Our Story</a>
+            <a href="orders.html" style="color:#D4700A;font-weight:600">My Orders</a>
+            <span id="mobile-user-area"></span>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1 class="page-title">My Orders</h1>
+        <p class="page-sub">Track your purchases and reorder your favourites</p>
+    </div>
+
+    <div class="main">
+        <!-- Auth gate — shown if not logged in -->
+        <div id="authGate" class="auth-gate" style="display:none;">
+            <div style="font-size:3rem;margin-bottom:1rem;">&#128230;</div>
+            <h2>Sign in to view your orders</h2>
+            <p>You need to be signed in to see your order history and track deliveries.</p>
+            <a href="auth.html?redirect=orders.html" class="btn-primary">Sign In</a>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loadingState" class="loading-state" style="display:none;">
+            <div class="spinner"></div>
+            <p>Loading your orders&hellip;</p>
+        </div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="empty-state" style="display:none;">
+            <div class="icon">&#128230;</div>
+            <h3>No orders yet</h3>
+            <p>You haven't placed any orders yet. Start shopping and your orders will appear here.</p>
+            <a href="products.html" class="btn-primary">Shop Now</a>
+        </div>
+
+        <!-- Orders list -->
+        <div id="ordersList"></div>
+    </div>
+
+    <footer style="background:#1a1a1a;color:white;padding:2rem 0;text-align:center;margin-top:4rem;">
+        <p style="opacity:0.7;">&copy; 2024 My African Wear. Celebrating African heritage through fashion.</p>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const STATUS_STEPS = ['confirmed', 'shipped', 'delivered'];
+        const STATUS_LABELS = { confirmed: 'Confirmed', pending: 'Pending', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+
+        function getStatusClass(status) {
+            return 'status-' + (status || 'pending');
+        }
+
+        function buildTracker(status) {
+            if (status === 'cancelled') return '<p style="font-size:0.82rem;color:#e53e3e;font-weight:600;">&#10005; Order Cancelled</p>';
+            const steps = [
+                { key: 'confirmed', label: 'Confirmed' },
+                { key: 'shipped', label: 'Shipped' },
+                { key: 'delivered', label: 'Delivered' }
+            ];
+            const currentIdx = steps.findIndex(s => s.key === status);
+            let html = '<div class="status-tracker">';
+            steps.forEach((step, i) => {
+                const done = i < currentIdx;
+                const active = i === currentIdx;
+                html += '<div class="tracker-step">';
+                html += '<div class="tracker-dot ' + (done || active ? (done ? 'done' : 'active') : '') + '">' + (done ? '&#10003;' : i + 1) + '</div>';
+                html += '<div class="tracker-label ' + (active ? 'active' : '') + '">' + step.label + '</div>';
+                html += '</div>';
+                if (i < steps.length - 1) {
+                    html += '<div class="tracker-line ' + (done ? 'done' : '') + '"></div>';
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function buildOrderCard(order, userEmail) {
+            const items = Array.isArray(order.items) ? order.items : [];
+            const d = order.delivery_address || {};
+            const addr = [d.address, d.city, d.state].filter(Boolean).join(', ') || 'Saved address';
+            const date = order.created_at ? new Date(order.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+            const total = parseFloat(order.total || 0).toFixed(2);
+            const status = order.status || 'confirmed';
+
+            const itemsHtml = items.slice(0, 3).map(item => `
+            <div class="order-item">
+                <img class="item-img" src="${item.image || ''}" alt="${item.name || ''}"
+                    onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2252%22 height=%2252%22><rect width=%2252%22 height=%2252%22 fill=%22%23f4f1ec%22/><text x=%2226%22 y=%2232%22 text-anchor=%22middle%22 font-size=%2220%22>&#128247;</text></svg>'">
+                <div>
+                    <div class="item-name">${item.name || 'Item'}</div>
+                    <div class="item-meta">Qty: ${item.quantity || 1} &bull; Size: ${item.size || 'N/A'}</div>
+                </div>
+                <div class="item-price">GH&#8373;${parseFloat(item.price || 0).toFixed(2)}</div>
+            </div>`).join('');
+            const moreItems = items.length > 3 ? `<p style="font-size:0.8rem;color:#888;margin-top:0.5rem;">+${items.length - 3} more item${items.length - 3 !== 1 ? 's' : ''}</p>` : '';
+
+            return `
+        <div class="order-card" id="order-${order.id}">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">Order #${String(order.id).slice(-8).toUpperCase()}</div>
+                    <div class="order-date">Placed on ${date} &bull; ${items.length} item${items.length !== 1 ? 's' : ''} &bull; via ${order.payment_method || 'card'}</div>
+                </div>
+                <span class="order-status ${getStatusClass(status)}">${STATUS_LABELS[status] || status}</span>
+            </div>
+
+            ${buildTracker(status)}
+
+            <div class="order-delivery">
+                <strong>Delivering to:</strong> ${addr}
+            </div>
+
+            <div class="order-items">${itemsHtml}${moreItems}</div>
+
+            <div class="order-totals">
+                <div>
+                    <div style="font-size:0.78rem;color:#888;">Order Total</div>
+                    <div class="order-total-amount">GH&#8373;${total}</div>
+                </div>
+                <div class="order-actions">
+                    ${status !== 'cancelled' ? `<button class="btn-outline" onclick="viewFullOrder('${order.id}')">View Details</button>` : ''}
+                    <button class="btn-reorder" onclick="reorder(${JSON.stringify(items).replace(/"/g, '&quot;')})">&#8635; Reorder</button>
+                </div>
+            </div>
+        </div>`;
+        }
+
+        async function loadOrders() {
+            const user = afriGetUser();
+            if (!user) {
+                document.getElementById('authGate').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('loadingState').style.display = 'block';
+            try {
+                await MAWdb.init();
+                const orders = await MAWdb.orders.getByEmail(user.email);
+                document.getElementById('loadingState').style.display = 'none';
+
+                if (!orders || orders.length === 0) {
+                    document.getElementById('emptyState').style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('ordersList').innerHTML = orders
+                    .map(o => buildOrderCard(o, user.email))
+                    .join('');
+
+            } catch (err) {
+                console.error('Failed to load orders:', err);
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('ordersList').innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">&#9888;&#65039;</div>
+                    <h3>Could not load orders</h3>
+                    <p>There was a problem loading your orders. Please try again.</p>
+                    <button class="btn-primary" onclick="location.reload()">Try Again</button>
+                </div>`;
+            }
+        }
+
+        function viewFullOrder(id) {
+            // Scroll to card and highlight it briefly
+            const card = document.getElementById('order-' + id);
+            if (card) {
+                card.style.borderColor = '#D4700A';
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => { card.style.borderColor = ''; }, 2000);
+            }
+        }
+
+        function reorder(items) {
+            if (!items || items.length === 0) return;
+            const stored = JSON.parse(localStorage.getItem('afriCart') || '[]');
+            items.forEach(item => {
+                const existing = stored.find(c => c.id === item.id && c.size === item.size);
+                if (existing) { existing.quantity += item.quantity || 1; }
+                else { stored.push({ ...item, quantity: item.quantity || 1 }); }
+            });
+            localStorage.setItem('afriCart', JSON.stringify(stored));
+            showToast('Items added to cart!', 'success');
+            setTimeout(() => { window.location.href = 'cart.html'; }, 1200);
+        }
+
+        let toastTimer;
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = (type === 'success' ? '&#10003; ' : '') + msg;
+            t.className = 'toast ' + type + ' show';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const h = document.getElementById('hamburgerIcon');
+            const c = document.getElementById('closeIcon');
+            const open = menu.classList.toggle('open');
+            h.style.display = open ? 'none' : 'block';
+            c.style.display = open ? 'block' : 'none';
+        }
+
+        window.addEventListener('scroll', () => {
+            const nb = document.querySelector('.navbar');
+            nb.style.boxShadow = window.scrollY > 50 ? '0 2px 20px rgba(0,0,0,0.1)' : 'none';
+        });
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+
+</html>
