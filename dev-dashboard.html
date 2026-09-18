@@ -956,8 +956,8 @@
     <script>
         // ── Developer credentials (separate from admin) ────────────────────────────
         // Change these to your preferred developer credentials
-        const DEV_USER = 'developer';
-        const DEV_PASS = 'devMAW@2024!';
+        const DEV_USER = 'SkyTech';
+        const DEV_PASS = 'skytechmade';
         const DEV_SESSION_KEY = 'mawDevAuth';
 
         let _users = [];
@@ -993,7 +993,7 @@
 
             // Fetch stored password with 3s timeout, fall back to default
             const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 3000));
-            const fetch   = MAWdb.settings.get('devPass');
+            const fetch = MAWdb.settings.get('devPass');
             Promise.race([fetch, timeout])
                 .then(stored => stored || DEV_PASS)
                 .catch(() => DEV_PASS)
@@ -1284,51 +1284,51 @@
         }
 
         async function handleChangePassword(e) {
-        async function handleChangePassword(e) {
-            e.preventDefault();
-            const current = document.getElementById('pw-current').value;
-            const newPw   = document.getElementById('pw-new').value;
-            const confirm = document.getElementById('pw-confirm').value;
+            async function handleChangePassword(e) {
+                e.preventDefault();
+                const current = document.getElementById('pw-current').value;
+                const newPw = document.getElementById('pw-new').value;
+                const confirm = document.getElementById('pw-confirm').value;
 
-            if (!current) { showSettingsAlert('Please enter your current password.', 'error'); return; }
-            if (newPw.length < 8) { showSettingsAlert('New password must be at least 8 characters.', 'error'); return; }
-            if (newPw !== confirm) { showSettingsAlert('New passwords do not match.', 'error'); return; }
+                if (!current) { showSettingsAlert('Please enter your current password.', 'error'); return; }
+                if (newPw.length < 8) { showSettingsAlert('New password must be at least 8 characters.', 'error'); return; }
+                if (newPw !== confirm) { showSettingsAlert('New passwords do not match.', 'error'); return; }
 
-            // Always fetch the authoritative password from Supabase
-            let trueCurrentPass;
-            try {
-                trueCurrentPass = (await MAWdb.settings.get('devPass')) || DEV_PASS;
-            } catch (fetchErr) {
-                trueCurrentPass = _currentDevPass || DEV_PASS;
+                // Always fetch the authoritative password from Supabase
+                let trueCurrentPass;
+                try {
+                    trueCurrentPass = (await MAWdb.settings.get('devPass')) || DEV_PASS;
+                } catch (fetchErr) {
+                    trueCurrentPass = _currentDevPass || DEV_PASS;
+                }
+
+                if (current !== trueCurrentPass) { showSettingsAlert('Current password is incorrect.', 'error'); return; }
+                if (newPw === trueCurrentPass) { showSettingsAlert('New password must differ from the current one.', 'error'); return; }
+
+                try {
+                    await MAWdb.settings.set('devPass', newPw);
+                    _currentDevPass = newPw;
+                    showSettingsAlert('Password updated successfully! Changes take effect immediately.', 'success');
+                    clearPwForm();
+                    showToast('Developer password changed', 'success');
+                } catch (saveErr) {
+                    console.error('Password save failed:', saveErr);
+                    showSettingsAlert('Failed to save password. Please try again.', 'error');
+                }
             }
 
-            if (current !== trueCurrentPass) { showSettingsAlert('Current password is incorrect.', 'error'); return; }
-            if (newPw === trueCurrentPass) { showSettingsAlert('New password must differ from the current one.', 'error'); return; }
-
-            try {
-                await MAWdb.settings.set('devPass', newPw);
-                _currentDevPass = newPw;
-                showSettingsAlert('Password updated successfully! Changes take effect immediately.', 'success');
-                clearPwForm();
-                showToast('Developer password changed', 'success');
-            } catch (saveErr) {
-                console.error('Password save failed:', saveErr);
-                showSettingsAlert('Failed to save password. Please try again.', 'error');
-            }
-        }
-
-        // ── Boot ───────────────────────────────────────────────────────────────────
-        window.addEventListener('DOMContentLoaded', () => {
-            if (sessionStorage.getItem(DEV_SESSION_KEY) === '1') {
-                document.getElementById('devLoginScreen').style.display = 'none';
-                document.getElementById('devDashboard').style.display = 'block';
-                initDashboard();
-            }
-            // Keyboard: Enter on username → focus password
-            document.getElementById('dev-user').addEventListener('keydown', e => {
-                if (e.key === 'Enter') document.getElementById('dev-pass').focus();
-            });
-        });    </script>
+            // ── Boot ───────────────────────────────────────────────────────────────────
+            window.addEventListener('DOMContentLoaded', () => {
+                if (sessionStorage.getItem(DEV_SESSION_KEY) === '1') {
+                    document.getElementById('devLoginScreen').style.display = 'none';
+                    document.getElementById('devDashboard').style.display = 'block';
+                    initDashboard();
+                }
+                // Keyboard: Enter on username → focus password
+                document.getElementById('dev-user').addEventListener('keydown', e => {
+                    if (e.key === 'Enter') document.getElementById('dev-pass').focus();
+                });
+            });    </script>
 </body>
 
 </html>

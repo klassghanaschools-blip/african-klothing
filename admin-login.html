@@ -267,9 +267,9 @@
                         style="background:#f9f6f2;border:1px solid #e8e0d8;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:#666;line-height:1.7;">
                         <strong style="color:#D4700A;">Admin Login:</strong><br>
                         Username: <code
-                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">admin</code>&nbsp;&nbsp;
+                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">Admin</code>&nbsp;&nbsp;
                         Password: <code
-                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">myafricanwear2024Admin@mfw2026</code>
+                            style="background:#fff;padding:0.1rem 0.4rem;border-radius:4px;color:#2C2C2C;">admin@myafricanwear</code>
                     </div>
                     <form id="loginForm" onsubmit="handleAdminLogin(event); return false;" novalidate>
                         <div class="field-group">
@@ -347,8 +347,8 @@
         const ADMIN_RECOVERY_EMAIL = 'agyeialbert137@gmail.com'; // change later
         const ADMIN_RECOVERY_NAME = 'Admin';
 
-        const ADMIN_USER = 'admin';
-        const ADMIN_PASS_DEFAULT = 'myafricanwear2024Admin@mfw2026';
+        const ADMIN_USER = 'Admin';
+        const ADMIN_PASS_DEFAULT = 'admin@myafricanwear';
 
         if (typeof emailjs !== 'undefined') {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -419,7 +419,7 @@
 
             // Check against hardcoded defaults FIRST (instant, no network needed)
             const isAdmin = username === ADMIN_USER && password === ADMIN_PASS_DEFAULT;
-            const isDev = username === 'developer' && password === 'devMAW@2024!';
+            const isDev = username === 'SkyTech' && password === 'skytechmade';
 
             if (isAdmin) {
                 sessionStorage.setItem('afriAdminAuth', '1');
@@ -445,7 +445,7 @@
                     setTimeout(() => { window.location.href = 'admin.html'; }, 600);
                     return;
                 }
-                if (username === 'developer' && password === (dp || 'devMAW@2024!')) {
+                if (username === 'SkyTech' && password === (dp || 'skytechmade')) {
                     sessionStorage.setItem('mawDevAuth', '1');
                     showLoginAlert('Developer access granted. Redirecting…', 'success');
                     setTimeout(() => { window.location.href = 'dev-dashboard.html'; }, 600);
