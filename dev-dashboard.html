@@ -991,27 +991,20 @@
             btn.disabled = true;
             btn.textContent = 'Signing in...';
 
-            // Fetch stored password with 3s timeout, fall back to default
-            const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 3000));
-            const fetch = MAWdb.settings.get('devPass');
-            Promise.race([fetch, timeout])
-                .then(stored => stored || DEV_PASS)
-                .catch(() => DEV_PASS)
-                .then(validPass => {
-                    if (u === DEV_USER && p === validPass) {
-                        _currentDevPass = validPass;
-                        sessionStorage.setItem(DEV_SESSION_KEY, '1');
-                        document.getElementById('devLoginScreen').style.display = 'none';
-                        document.getElementById('devDashboard').style.display = 'block';
-                        initDashboard();
-                    } else {
-                        alertEl.textContent = 'Invalid credentials. Access denied.';
-                        alertEl.classList.add('show');
-                        document.getElementById('dev-pass').value = '';
-                        btn.disabled = true;
-                        setTimeout(() => { btn.disabled = false; btn.textContent = 'Access Dashboard'; }, 2000);
-                    }
-                });
+            // Always use hardcoded credentials — no database lookup needed for login
+            if (u === DEV_USER && p === DEV_PASS) {
+                _currentDevPass = DEV_PASS;
+                sessionStorage.setItem(DEV_SESSION_KEY, '1');
+                document.getElementById('devLoginScreen').style.display = 'none';
+                document.getElementById('devDashboard').style.display = 'block';
+                initDashboard();
+            } else {
+                alertEl.textContent = 'Invalid credentials. Access denied.';
+                alertEl.classList.add('show');
+                document.getElementById('dev-pass').value = '';
+                btn.disabled = true;
+                setTimeout(() => { btn.disabled = false; btn.textContent = 'Access Dashboard'; }, 2000);
+            }
         }
 
         function devLogout() {
