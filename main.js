@@ -269,7 +269,7 @@ class AfriWearApp {
     const discount = promo ? subtotal * promo.discount : 0;
     const discounted = subtotal - discount;
     const tax = discounted * 0.08;
-    const shipping = discounted > 150 ? 0 : 15;
+    const shipping = discounted > 5000 ? 0 : 15;
     const total = discounted + tax + shipping;
     const el = document.querySelector('.cart-totals');
     if (!el) return;
