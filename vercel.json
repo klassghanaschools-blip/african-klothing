@@ -1,44 +1,86 @@
 {
   "version": 2,
   "name": "african-klothing",
-  "builds": [
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/products", "dest": "/products.html" },
-    { "src": "/cart", "dest": "/cart.html" },
-    { "src": "/auth", "dest": "/auth.html" },
-    { "src": "/orders", "dest": "/orders.html" },
-    { "src": "/story", "dest": "/story.html" },
-    { "src": "/classes", "dest": "/classes.html" },
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/admin-login", "dest": "/admin-login.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/products",
+      "dest": "/products.html"
+    },
+    {
+      "src": "/cart",
+      "dest": "/cart.html"
+    },
+    {
+      "src": "/auth",
+      "dest": "/auth.html"
+    },
+    {
+      "src": "/orders",
+      "dest": "/orders.html"
+    },
+    {
+      "src": "/story",
+      "dest": "/story.html"
+    },
+    {
+      "src": "/classes",
+      "dest": "/classes.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "/admin-login",
+      "dest": "/admin-login.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     },
     {
       "source": "/resources/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/(.*)\\.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
       ]
     }
   ]
