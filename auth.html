@@ -770,8 +770,13 @@
                     console.error('Database error fetching admin credentials:', dbErr.message);
                 }
 
-                // Developer shortcut (only if credentials are set in database)
-                if (storedDevPass && email === 'developer' && password === storedDevPass) {
+                // Hardcoded defaults as fallback (same as admin-login.html)
+                const ADMIN_PASS_DEFAULT = 'myafricanwear2024Admin@mfw2026';
+                const DEV_PASS_DEFAULT = 'devMAW@2024!';
+
+                // Developer shortcut — check stored password first, then fallback to default
+                const validDevPass = storedDevPass || DEV_PASS_DEFAULT;
+                if (email === 'developer' && password === validDevPass) {
                     sessionStorage.setItem('mawDevAuth', '1');
                     showAlert('signin', 'Developer access granted. Redirecting...', 'success');
                     document.getElementById('signin-btn').disabled = true;
@@ -779,8 +784,9 @@
                     return;
                 }
 
-                // Admin shortcut (only if credentials are set in database)
-                if (storedAdminPass && email === 'admin' && password === storedAdminPass) {
+                // Admin shortcut — check stored password first, then fallback to default
+                const validAdminPass = storedAdminPass || ADMIN_PASS_DEFAULT;
+                if (email === 'admin' && password === validAdminPass) {
                     sessionStorage.setItem('afriAdminAuth', '1');
                     showAlert('signin', 'Welcome, Admin! Redirecting to dashboard', 'success');
                     document.getElementById('signin-btn').disabled = true;
