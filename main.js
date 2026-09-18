@@ -5,7 +5,7 @@
 class AfriWearApp {
   constructor() {
     this.cart = JSON.parse(localStorage.getItem('afriCart')) || [];
-    this.products = [];   // populated async from IndexedDB
+    this.products = [];   // populated async from Supabase
     this.filters = { category: [], color: [], size: [], priceRange: [0, 1000], gender: [] };
 
     // Initialize global state variables
@@ -15,24 +15,37 @@ class AfriWearApp {
 
   /* ── Bootstrap ─────────────────────────────────────────────────────────── */
   async init() {
-    // Wait for DB to be ready (seed + migrations)
-    await MAWdb.init();
-    this.products = await MAWdb.products.getAll();
-
+    // Render cart immediately from localStorage — no network needed
     this.updateCartCounter();
-    this.initializeAnimations();
-    this.bindEvents();
-    this.initializeFilters();
-    this.loadPageContent();
+    this.renderNavUser();
 
-    if (window.location.pathname.endsWith('cart.html')) {
+    if (window.location.pathname.endsWith('cart.html') ||
+      window.location.href.includes('cart.html')) {
       const navBtn = document.getElementById('navCartBtn');
       const floatBtn = document.getElementById('floatCartBtn');
       if (navBtn) navBtn.style.display = 'none';
       if (floatBtn) floatBtn.style.display = 'none';
+
+      // Render cart immediately from localStorage data (cart items already
+      // contain a full product snapshot saved at add-to-cart time)
+      this.renderCart();
     }
 
-    this.renderNavUser();
+    this.initializeAnimations();
+    this.bindEvents();
+    this.initializeFilters();
+
+    // Load products from Supabase in the background
+    try {
+      await MAWdb.init();
+      this.products = await MAWdb.products.getAll();
+    } catch (err) {
+      console.warn('Supabase product load failed, continuing with empty catalog:', err);
+      this.products = [];
+    }
+
+    // Now render page-specific content that needs the product catalog
+    this.loadPageContent();
   }
 
   /* ── Nav user area ─────────────────────────────────────────────────────── */
